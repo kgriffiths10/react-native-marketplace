@@ -11,6 +11,7 @@ import { useSignUp } from '@clerk/clerk-expo';
 import { error } from 'console';
 import { ReactNativeModal } from "react-native-modal";
 import { CircleCheck, Lock } from 'lucide-react-native';
+import { fetchAPI } from '@/lib/fetch';
 
 
 const SignUp = () => {
@@ -54,9 +55,22 @@ const SignUp = () => {
     
         try {
             const completeSignUp = await signUp.attemptEmailAddressVerification({ code: verification.code, })
-        
+            
+            const joinedDate = new Date().toISOString();
             if (completeSignUp.status === 'complete') {
-                // TODO: Create a database user
+
+                await fetchAPI('/(api)/user', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        firstName: form.firstName,
+                        lastName: form.lastName,
+                        email: form.email,
+                        clerkID: completeSignUp.createdUserId,
+                    }),
+                });
+                
+                
+                
                 await setActive({ session: completeSignUp.createdSessionId })
                 setVerification({ ...verification, state: 'success' });
             } else {

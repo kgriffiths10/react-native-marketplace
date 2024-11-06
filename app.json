@@ -23,11 +23,11 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "server",
       "favicon": ""
     },
     "plugins": [
-      "expo-router",
+      ["expo-router", { "origin": "https://studentmarketplace.com/" }],
       "expo-secure-store"
     ],
     "experiments": {
