@@ -56,7 +56,6 @@ const SignUp = () => {
         try {
             const completeSignUp = await signUp.attemptEmailAddressVerification({ code: verification.code, })
             
-            const joinedDate = new Date().toISOString();
             if (completeSignUp.status === 'complete') {
 
                 await fetchAPI('/(api)/user', {

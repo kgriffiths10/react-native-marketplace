@@ -1,12 +1,10 @@
 // API Route: /(api)/user
-// API Method: POST 
-// When the app sends data to this route, this function will be triggered.
 
 import { neon } from '@neondatabase/serverless';
 
-
+// API Method: POST 
+// When the app sends data to this route, this function will be triggered.
 export async function POST(request: Request) {  
-    
     try {
         const sql = neon(`${process.env.DATABASE_URL}`);
         const { firstName, lastName, email, clerkID } = await request.json(); // Looks inside the body of POST request, which is expected to contain a JSON object with firstName, lastName, etc.
@@ -28,3 +26,5 @@ export async function POST(request: Request) {
         return Response.json( {error: error }, { status: 500 });
     }
 }
+
+
