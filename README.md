@@ -13,10 +13,11 @@ This is a comprehensive React Native marketplace application built with [Expo](h
 - **Icon Integration**: Rich iconography with Lucide icons.
 
 ## Screenshots
-
-<img src="assets/screenshots/marketplace-main.png" alt="marketplace-main" width="200"/>
-<img src="assets/screenshots/marketplace-categories.png" alt="marketplace-categories" width="200"/>
-<img src="assets/screenshots/marketplace-search.png" alt="marketplace-search" width="200"/>
+<div style="display: flex; justify-content: space-around;">
+   <img src="assets/screenshots/marketplace-main.png" alt="marketplace-main" width="200"/>
+   <img src="assets/screenshots/marketplace-categories.png" alt="marketplace-categories" width="200"/>
+   <img src="assets/screenshots/marketplace-search.png" alt="marketplace-search" width="200"/>
+</div>
 
 ## Get started
 
