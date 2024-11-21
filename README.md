@@ -5,11 +5,18 @@ This is a comprehensive React Native marketplace application built with [Expo](h
 ## Features
 
 - **User Authentication**: Secure user authentication using Clerk.
+- **Database Integration**: Serveless PostgreSQl database.
 - **Token Storage**: Secure token storage with Expo Secure Store.
 - **Custom Components**: Reusable custom components for buttons, input fields, and more.
 - **Styling**: Tailwind CSS for consistent and responsive styling.
 - **File-Based Routing**: Simplified navigation with Expo Router.
 - **Icon Integration**: Rich iconography with Lucide icons.
+
+## Screenshots
+
+<img src="assets/screenshots/marketplace-main.png" alt="marketplace-main" width="200"/>
+<img src="assets/screenshots/marketplace-categories.png" alt="marketplace-categories" width="200"/>
+<img src="assets/screenshots/marketplace-search.png" alt="marketplace-search" width="200"/>
 
 ## Get started
 
