@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import { useState } from 'react';
 import { onboarding } from '@/constants';
 import CustomButton from '@/components/CustomButton';
+import React from 'react';
 
 const Welcome = () => {
     const swiperRef = useRef<Swiper>(null);

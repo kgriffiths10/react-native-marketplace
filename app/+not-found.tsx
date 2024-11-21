@@ -9,3 +9,5 @@ const NotFound = () => {
         </View>
     );
 }
+
+export default NotFound;

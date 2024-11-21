@@ -2,12 +2,11 @@ import { Stack, Tabs } from 'expo-router';
 import TabBar from '@/components/TabBar';
 import { Text, View } from 'react-native';
 import { Heart, ListPlus, MessageCircleMore, Search, Settings } from 'lucide-react-native';
-import React from 'react';
 
 
 const TabIcon = ({ source, focused} : {source: JSX.Element, focused: boolean}) => {
 	return (
-		<View className={`w-12 h-12 rounded-full items-center justify-center ${focused ? 'bg-primary-400' : ''}`}>
+		<View className={`rounded-full ${focused ? 'bg-primary-400' : ''} w-12 h-12 items-center justify-center`}>
 			{source}
 		</View>
 	);
@@ -20,21 +19,23 @@ const TabsLayout = () => {
 			screenOptions={{
 			tabBarShowLabel: false, 
 			tabBarStyle: {
-				backgroundColor: '#1f1f1f', 
-				borderRadius: 100, 
-				paddingBottom: 0, 
-				overflow: 'hidden', 
-				marginBottom: 24, 
-				marginHorizontal: 20,
-				height: 78,
-				display: 'flex',
-				justifyContent: 'space-between',
-				alignItems: 'center',
-				flexDirection: 'row',
+				backgroundColor: "#333333",
 				position: 'absolute',
-				zIndex: 10,
-				paddingHorizontal: 8,
-			},
+				bottom: 24,
+				height: 72,
+				alignItems: 'center',
+				justifyContent: 'center',
+				paddingTop: 16,
+				marginHorizontal: 16,
+				borderRadius: 50,
+				borderTopWidth: 0,
+				
+				
+
+
+			  },
+			
+			
 
 		}}>
 			<Tabs.Screen name="favListings" options={{title: "Favorite Listings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<Heart size={28} className={focused ? 'text-gray-200' : 'text-gray-400'} />}/>}} />
