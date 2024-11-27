@@ -14,7 +14,7 @@ export async function GET(request: Request) {
         if (response.length === 0) {
             return new Response(JSON.stringify({ error: 'Categories not found' }), { status: 404 });
         }
-        console.log('console.log response from api route:', response);
+        // console.log('console.log response from api route:', response);
         return new Response(JSON.stringify({ data: response }), { status: 200 });
 
     } catch (error) {

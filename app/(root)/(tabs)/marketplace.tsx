@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
 	Dimensions,
 	FlatList,
@@ -14,7 +14,7 @@ import { SignedIn, useUser } from '@clerk/clerk-expo';
 import WelcomeMessage from '@/components/WelcomeMessage';
 import CategoryScroll from '@/components/CategoryScroll';
 import { useFetch } from '@/lib/fetch';
-import { ChevronLeft, Locate, MapPin, Search } from 'lucide-react-native';
+import { ChevronLeft, Locate, MapPin, Search, Settings2 } from 'lucide-react-native';
 
 interface Listing {
 	listing_id: string;
@@ -32,6 +32,8 @@ interface Listing {
 	condition: string;
 	location: string;
 	category_name: string;
+	first_name: string;
+	last_name: string;
 }
 
 const Marketplace = () => {
@@ -44,16 +46,7 @@ const Marketplace = () => {
 	const [searching, setSearching] = useState<boolean>(false);
 
 	const { data: listings, loading, error } = useFetch<Listing[]>('/(api)/listings');
-	if (loading) {
-		return <Text>Loading...</Text>;
-	}
-	if (error) {
-		return <Text>Error fetching listings</Text>;
-	}
 
-	const featuredListings = listings?.filter((listing) => listing.featured > 0) || [];
-	const recentListings =
-		listings?.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) || [];
 
 	// Filter listings based on search query
 	const searchResults =
@@ -69,162 +62,143 @@ const Marketplace = () => {
 		? listings?.filter((listing) => listing.category_name === selectedCategory) || []
 		: [];
 
+
 	const handleSearch = () => {
 		setSearching(true);
 		Keyboard.dismiss(); 
 	}
 
-	const handleLocation = () => {
-		// Implement location change using a modal
-	}
 
-	return (
-		<View className="bg-neutral-900 flex-1">
-			<SafeAreaView className="p-4 pb-0 ">
-				<SignedIn>
-				<WelcomeMessage clerkID={clerkID || ''} />
-				</SignedIn>
-				
-				{/* Search Bar */}
-				<View className='flex flex-row gap-4'>
-					<TextInput
-					value={searchQuery}
-					onChangeText={setSearchQuery}
-					placeholder="Search listings..."
-					placeholderTextColor="gray"
-					onSubmitEditing={handleSearch} // Trigger search on return key press
-					className="bg-neutral-700 text-neutral-100 p-4 rounded-lg flex flex-1"
-					/>
-					<TouchableOpacity
-					onPress={() => setSearching(true)}
-					className=" bg-primary-400 rounded-full w-12 h-12 items-center justify-center"
-					>
-						<Search className='text-neutral-100' />
-					</TouchableOpacity>
-				</View>
-
-				{/* Location Setting */}
-				<TouchableOpacity className="flex flex-row items-center gap-2 mt-1" onPress={handleLocation}>
-					<MapPin strokeWidth={1} className=" text-neutral-600">Location:</MapPin>
-					<Text className="text-sm font-PoppinsLight text-neutral-600">San Francisco, CA</Text>
-				</TouchableOpacity>
-
-			</SafeAreaView>
-
-			{/* Content */}
-			<View className="p-4 rounded-t-3xl bg-neutral-100">
-				{/* Hide category scroller when searching */}
-				{!searching && selectedCategory === null && (
-				<View className="mb-4 w-full bg-primary-400 h-16 rounded-xl items-center justify-center">
-					<Text>This is an ad spot</Text>
-				</View>
-				)}
-
-				{/* Category scroller */}
-				{!searching && (
-				<CategoryScroll onCategorySelect={setSelectedCategory} />
-				)}
-			</View>
-
-			{/* Render Search Results when searching */}
-			{searching ? (
-				<FlatList
+	// JSX for conditional rendering
+	let content;
+	if (loading) {
+		content = <Text>Loading...</Text>;
+	} else if (error) {
+		content = <Text>Error fetching listings</Text>;
+	} else if (searching) {
+		content = (
+			<FlatList
 				data={searchResults}
 				renderItem={({ item }) => (
-					<View className="mb-4 flex flex-1">
-					<View className="h-32 bg-neutral-200"></View>
-					<Text className="text-sm font-PoppinsSemiBold text-neutral-900">{item.title}</Text>
-					<Text className="text-sm font-PoppinsRegular text-neutral-900">${item.price}</Text>
+					<View className="mb-8 flex flex-1">
+						<View className="h-64 bg-neutral-200 rounded-xl"></View>
+						<View className="flex flex-row justify-between mt-2">
+							<Text className="text-md font-PoppinsMedium text-neutral-800">{item.title}</Text>
+							<Text className="text-md font-PoppinsMedium text-neutral-800">${item.price}</Text>
+						</View>
+						<Text className="text-sm font-PoppinsRegular text-neutral-500">{item.location}</Text>
+						<Text className="text-sm font-PoppinsRegular text-neutral-500">
+							Sold by {item.first_name} {item.last_name}
+						</Text>
 					</View>
 				)}
 				keyExtractor={(item) => item.listing_id}
-				numColumns={2}
-				className="bg-neutral-100 px-4"
-				columnWrapperStyle={{ gap: 16, justifyContent: 'space-between' }}
+				className="bg-neutral-100"
+				showsVerticalScrollIndicator={false}
 				ListFooterComponent={<View className="h-32"></View>}
 				ListHeaderComponent={
-					<View className='flex flex-row gap-3 mb-4'>
+					<View className='flex flex-row mb-4'>
 						{/* Back button when searching */}
-						{searching && (
-							<TouchableOpacity
-							onPress={() => {
-								setSearching(false);
-								setSearchQuery('');
-							}}
-							className="rounded-full text-center align-center justify-center "
-							>
-								<ChevronLeft size={24} strokeWidth={2} className="text-neutral-900" />
-							</TouchableOpacity>
-						)}
+						<TouchableOpacity
+						onPress={() => {
+							setSearching(false);
+							setSearchQuery('');
+						}}
+						className="rounded-full justify-center mr-2"
+						>
+							<ChevronLeft size={24} strokeWidth={2} className="text-neutral-900" />
+						</TouchableOpacity>
 						{/* Search Results header */}
-						<Text className="text-lg font-PoppinsSemiBold text-neutral-900">
+						<Text className="text-lg font-PoppinsSemiBold text-neutral-800">
 							Search Results ({searchResults.length})
 						</Text>
 					</View>
 				}
-				/>
-			) : selectedCategory ? (
-				// FlatList for selected category
-				<FlatList
+			/>
+		);
+	} else if (selectedCategory) {
+		content = (
+			<FlatList
 				data={filteredListings}
 				renderItem={({ item }) => (
-					<View className="mb-4 flex flex-1">
-					<View className="h-32 bg-neutral-200"></View>
-					<Text className="text-sm font-PoppinsSemiBold text-neutral-900">{item.title}</Text>
-					<Text className="text-sm font-PoppinsRegular text-neutral-900">${item.price}</Text>
+					<View className="mb-8 flex flex-1">
+						<View className="h-64 bg-neutral-200 rounded-xl"></View>
+						<View className="flex flex-row justify-between mt-2">
+							<Text className="text-md font-PoppinsMedium text-neutral-800">{item.title}</Text>
+							<Text className="text-md font-PoppinsMedium text-neutral-800">${item.price}</Text>
+						</View>
+						<Text className="text-sm font-PoppinsRegular text-neutral-500">{item.location}</Text>
+						<Text className="text-sm font-PoppinsRegular text-neutral-500">
+							Sold by {item.first_name} {item.last_name}
+						</Text>
 					</View>
 				)}
 				keyExtractor={(item) => item.listing_id}
-				numColumns={2}
-				className="bg-neutral-100 px-4"
-				columnWrapperStyle={{ gap: 16, justifyContent: 'space-between' }}
+				className="bg-neutral-100"
+				showsVerticalScrollIndicator={false}
 				ListFooterComponent={<View className="h-32"></View>}
 				ListHeaderComponent={
-					<Text className="text-lg font-PoppinsSemiBold text-neutral-900 mb-4">
+					<Text className="text-lg font-PoppinsSemiBold text-neutral-800 mb-4">
 					{selectedCategory} ({filteredListings?.length})
 					</Text>
 				}
-				/>
-			) : (
-				// Flatlists for Featured and Recent Listings
-				<ScrollView className="bg-neutral-100 flex-1">
-				<Text className="text-lg font-PoppinsSemiBold text-neutral-900 mb-4 px-4">
-					Featured Listings
-				</Text>
-				<FlatList
-					data={featuredListings}
-					renderItem={({ item }) => (
-					<View className="mb-4 flex flex-1 pr-4 w-40">
-						<View className="h-32 bg-neutral-200"></View>
-						<Text className="text-sm font-PoppinsSemiBold text-neutral-900">{item.title}</Text>
-						<Text className="text-sm font-PoppinsRegular text-neutral-900">${item.price}</Text>
+			/>
+		);
+	} else {
+		content = <Text>No listings found. Search or select a category</Text>;
+	}
+
+
+
+	return (
+		<View className="bg-neutral-100 flex-1 p-4">
+
+			<SafeAreaView>
+
+				<SignedIn>
+					<WelcomeMessage clerkID={clerkID || ''} />
+				</SignedIn>
+				
+				<View className='flex flex-row gap-4'>
+					{/* Search Bar */}
+					<View className='flex flex-row flex-1 border-neutral-300 border rounded-full align-center justify-start p-3 '>
+						<Search className='text-neutral-800 w-12 h-12 mr-4' />
+						<TextInput 
+							placeholder='Search Listings' 
+							className='text-neutral-800 w-full'
+							value={searchQuery}
+							onChangeText={setSearchQuery}
+							onSubmitEditing={handleSearch}
+						>
+						</TextInput>
+					</View>
+					{/* Filter Button */}
+					<TouchableOpacity className='border-neutral-300 border rounded-full align-center justify-center p-3'>
+						<Settings2 className='text-neutral-800 w-12 h-12'></Settings2>
+					</TouchableOpacity>	
+				</View>
+
+				{/* Ad an Category Scroller */}
+				<View className="rounded-t-3xl bg-neutral-100 mt-8">
+					{/* Hide category scroller when searching */}
+					{!searching && selectedCategory === null && (
+					<View className="mb-4 w-full bg-primary-400 h-16 rounded-xl items-center justify-center">
+						<Text>This is an ad spot</Text>
 					</View>
 					)}
-					horizontal={true}
-					showsHorizontalScrollIndicator={false}
-					className="px-4"
-				/>
-				<Text className="text-lg font-PoppinsSemiBold text-neutral-900 mb-4 px-4">
-					Recent Listings
-				</Text>
-				<FlatList
-					data={recentListings}
-					renderItem={({ item }) => (
-					<View className="mb-4 flex flex-1 pr-4 w-40">
-						<View className="h-32 bg-neutral-200"></View>
-						<Text className="text-sm font-PoppinsSemiBold text-neutral-900">{item.title}</Text>
-						<Text className="text-sm font-PoppinsRegular text-neutral-900">${item.price}</Text>
-					</View>
+
+					{/* Category scroller */}
+					{!searching && (
+						<CategoryScroll onCategorySelect={setSelectedCategory} />
 					)}
-					horizontal={true}
-					showsHorizontalScrollIndicator={false}
-					className="px-4"
-				/>
-				<View className="h-32"></View>
-				</ScrollView>
-			)}
+				</View>
+			</SafeAreaView>
+			{content}
 		</View>
 	);
 };
 
 export default Marketplace;
+
+
+			

@@ -26,7 +26,7 @@ const WelcomeMessage: React.FC<WelcomeMessageProps> = ({ clerkID }) => {
 
     if (data && data.first_name && data.last_name) {
         return (
-            <Text className=' mb-2 text-neutral-100 font-PoppinsRegular text-lg'>Welcome back, {data.first_name}</Text>
+            <Text className=' mb-2 text-neutral-800 font-PoppinsSemiBold text-lg'>Welcome back, {data.first_name}</Text>
         );
     }
 };

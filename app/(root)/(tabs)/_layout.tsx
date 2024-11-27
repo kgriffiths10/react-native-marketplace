@@ -29,14 +29,7 @@ const TabsLayout = () => {
 				marginHorizontal: 16,
 				borderRadius: 50,
 				borderTopWidth: 0,
-				
-				
-
-
 			  },
-			
-			
-
 		}}>
 			<Tabs.Screen name="favListings" options={{title: "Favorite Listings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<Heart size={28} className={focused ? 'text-gray-200' : 'text-gray-400'} />}/>}} />
 			<Tabs.Screen name="userListings" options={{title: "Your Listings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<ListPlus size={28} className={focused ? 'text-gray-200' : 'text-gray-400'} />}/>}} />

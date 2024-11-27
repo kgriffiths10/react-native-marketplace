@@ -1,13 +1,10 @@
-import React from 'react';
-import { Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useRef } from 'react';
+import { StyleSheet, View, Button, Text } from 'react-native';
+import { BottomSheetModal, BottomSheetModalProvider, useBottomSheetModal } from '@gorhom/bottom-sheet';
 
-const Messages = () => {
-    return (
-        <SafeAreaView className=''>
-            <Text>Messages</Text>
-        </SafeAreaView>
-    );
+export default function Messages() {
+  	return (
+		<Text>Messages</Text>
+	);
 }
 
-export default Messages;

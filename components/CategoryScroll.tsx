@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { CarFront, CircleEllipsis, Dumbbell, Heater, House, Icon, MonitorSmartphone, NotebookText, Route, Shirt, Sofa } from 'lucide-react-native'; 
 import { useFetch } from '@/lib/fetch';
@@ -28,8 +28,16 @@ interface CategoryScrollProps {
 
 const CategoryScroll: React.FC<CategoryScrollProps> = ({ onCategorySelect }) => {
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
 	const { data: categories, loading, error } = useFetch<Category[]>('/(api)/categories');
+
+	useEffect(() => {
+		if (categories && categories.length > 0) {
+		  // Set the default category to the first category
+		  const defaultCategory = categories[0].category_name;
+		  setSelectedCategory(defaultCategory);
+		  onCategorySelect(defaultCategory); // Notify the parent component
+		}
+	}, [categories, onCategorySelect]);
 
 	if (loading) {
 		return;
@@ -45,7 +53,7 @@ const CategoryScroll: React.FC<CategoryScrollProps> = ({ onCategorySelect }) => 
 
 	return (
 		<ScrollView
-		className="flex flex-row overflow-visible gap-3 mb-4 "
+		className="flex flex-row overflow-visible gap-4 "
 		horizontal={true}
 		decelerationRate={0.8}
 		showsHorizontalScrollIndicator={false}
@@ -53,19 +61,21 @@ const CategoryScroll: React.FC<CategoryScrollProps> = ({ onCategorySelect }) => 
 			{categories.map((category) => {
 				const Icon = iconMapping[category.category_name] || null;
 				return (
-				<TouchableOpacity
-					key={category.category_id}
-					onPress={() => {
-					setSelectedCategory(category.category_name);
-					onCategorySelect(category.category_name); // Lift the state up to Marketplace
-					}}
-					className='flex flex-col items-center justify-center gap-2'
-				>
-					<View className={`flex items-center justify-center h-14 w-14 rounded-full ${selectedCategory === category.category_name ? 'bg-primary-400' : 'bg-neutral-200'}`}>
-					{Icon && <Icon size={24} strokeWidth={1.5} className={selectedCategory === category.category_name ? 'text-neutral-100' : 'text-neutral-500'} />}
-					</View>
-					<Text className={`font-PoppinsRegular text-xs ${selectedCategory === category.category_name ? 'text-primary-400' : 'text-neutral-500'}`}>{category.category_name}</Text>
-				</TouchableOpacity>
+					<TouchableOpacity
+						key={category.category_id}
+						onPress={() => {
+						setSelectedCategory(category.category_name);
+						onCategorySelect(category.category_name); // Lift the state up to Marketplace
+						}}
+					>
+						<View className='flex flex-col gap-2 items-center'>
+							<View className={`flex items-center justify-center h-14 w-14 rounded-full ${selectedCategory === category.category_name ? 'bg-primary-400' : 'bg-neutral-200'}`}>
+								{Icon && <Icon size={24} strokeWidth={1.5} className={selectedCategory === category.category_name ? 'text-neutral-100' : 'text-neutral-500'} />}
+							</View>
+						
+							<Text className={`font-PoppinsRegular text-xs ${selectedCategory === category.category_name ? 'text-primary-400' : 'text-neutral-500'}`}>{category.category_name}</Text>
+						</View>
+					</TouchableOpacity>
 				);
 			})}
 		</ScrollView>

@@ -1,4 +1,4 @@
-# React Native Mobile App 👋
+# React Native Mobile App - Student Marketplace 👋
 
 This is a comprehensive React Native marketplace application built with [Expo](https://expo.dev). The app is designed to facilitate buying and selling items, managing listings, and interacting with other users. It leverages modern technologies and libraries to provide a seamless and efficient development experience.
 

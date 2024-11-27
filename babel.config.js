@@ -12,6 +12,7 @@ module.exports = function (api) {
     plugins: [
       'nativewind/babel',
       '@babel/plugin-transform-runtime',
+      'react-native-reanimated/plugin', // Has to be listed last
     ],
   };
 };

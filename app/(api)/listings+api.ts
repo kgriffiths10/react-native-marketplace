@@ -8,9 +8,22 @@ export async function GET(request: Request) {
 
         // Query the categories table to get all categories
         const response = await sql`
-            SELECT listings.*, categories.category_name
-            FROM listings
-            JOIN categories ON listings.category_id = categories.category_id;
+            SELECT 
+                listings.*, 
+                categories.category_name, 
+                users.first_name, 
+                users.last_name
+            FROM 
+                listings
+            JOIN 
+                categories 
+            ON 
+                listings.category_id = categories.category_id
+            JOIN 
+                users 
+            ON 
+                listings.user_id = users.user_id
+            WHERE listings.status = 'active';
 
         `;
 
@@ -18,7 +31,7 @@ export async function GET(request: Request) {
         if (response.length === 0) {
             return new Response(JSON.stringify({ error: 'listings not found' }), { status: 404 });
         }
-        console.log('console.log response from api route:', response);
+        // console.log('console.log response from api route:', response);
         return new Response(JSON.stringify({ data: response }), { status: 200 });
 
     } catch (error) {
