@@ -1,4 +1,5 @@
-// API Route: /(api)/userListings
+// API Route: /(api)/listings/userListings
+// Find user listings (condensed information for cards) by clerkID
 
 import { neon } from '@neondatabase/serverless';
 
@@ -27,7 +28,7 @@ export async function GET(request: Request) {
         const userId = userResponse[0].user_id;
 
         const listingsResponse = await sql`
-            SELECT * FROM listings WHERE user_id = ${userId}
+            SELECT listing_id, title, price, status FROM listings WHERE user_id = ${userId}
         `;
 
         if (listingsResponse.length === 0) {
