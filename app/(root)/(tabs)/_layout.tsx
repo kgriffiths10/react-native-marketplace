@@ -1,5 +1,4 @@
 import { Stack, Tabs } from 'expo-router';
-import TabBar from '@/components/TabBar';
 import { Text, View } from 'react-native';
 import { Heart, ListPlus, MessageCircleMore, Search, Settings } from 'lucide-react-native';
 

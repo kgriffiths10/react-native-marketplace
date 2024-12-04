@@ -9,6 +9,8 @@ import { ClerkProvider, ClerkLoaded } from '@clerk/clerk-expo'
 import * as SecureStore from 'expo-secure-store';
 
 import { Slot } from 'expo-router'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
@@ -51,15 +53,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <ClerkLoaded>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(root)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </ClerkLoaded>
-    </ClerkProvider>
+      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+        <ClerkLoaded>
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(root)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>            
+        </ClerkLoaded>
+      </ClerkProvider>  
+
   );
 }
