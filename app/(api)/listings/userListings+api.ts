@@ -1,6 +1,3 @@
-// API Route: /(api)/listings/userListings
-// Find user listings (condensed information for cards) by clerkID
-
 import { neon } from '@neondatabase/serverless';
 
 export async function GET(request: Request) {
@@ -24,11 +21,24 @@ export async function GET(request: Request) {
             return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
         }
 
-        // Use the user_id to query listings
+        // Use the user_id to query listings and join with categories
         const userId = userResponse[0].user_id;
 
         const listingsResponse = await sql`
-            SELECT listing_id, title, price, status FROM listings WHERE user_id = ${userId}
+            SELECT 
+                listings.listing_id, 
+                listings.title, 
+                listings.price, 
+                listings.status, 
+                categories.category_name
+            FROM 
+                listings
+            LEFT JOIN 
+                categories 
+            ON 
+                listings.category_id = categories.category_id
+            WHERE 
+                listings.user_id = ${userId}
         `;
 
         if (listingsResponse.length === 0) {
@@ -38,11 +48,11 @@ export async function GET(request: Request) {
         // Combine the user data with their listings data (if needed)
         const userListingData = {
             user_id: userId,
-            listings: listingsResponse, // The listings for this user
+            listings: listingsResponse, // The listings for this user with category names
         };
 
         return new Response(JSON.stringify({ data: userListingData }), { status: 200 });
-        
+
     } catch (error) {
         console.error('Error fetching user listings:', error);
         return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });

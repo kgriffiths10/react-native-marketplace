@@ -53,6 +53,8 @@ export default function RootLayout() {
   }
 
   return (
+    
+    
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
         <ClerkLoaded>
             <Stack>
@@ -60,9 +62,19 @@ export default function RootLayout() {
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen name="(root)" options={{ headerShown: false }} />
               <Stack.Screen name="+not-found" />
-            </Stack>            
+            </Stack>   
         </ClerkLoaded>
       </ClerkProvider>  
+    
+
 
   );
 }
+
+{/* 
+I need the bottom sheet modal on
+  
+<GestureHandlerRootView>
+<BottomSheetModalProvider> 
+
+*/}

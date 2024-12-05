@@ -21,6 +21,8 @@
     "@expo/vector-icons": "^14.0.2",
     "@gorhom/bottom-sheet": "^5.0.6",
     "@neondatabase/serverless": "^0.10.2",
+    "@ptomasroos/react-native-multi-slider": "^2.2.2",
+    "@react-native-community/slider": "^4.5.5",
     "@react-navigation/native": "^6.0.2",
     "expo": "^52.0.7",
     "expo-constants": "17.0.3",
