@@ -2,11 +2,14 @@ import BottomSheetModalComponent from '@/components/BottomSheetModal';
 import { useFetch } from '@/lib/fetch';
 import { useUser } from '@clerk/clerk-expo';
 import BottomSheet, { BottomSheetModal } from '@gorhom/bottom-sheet';
-import { EllipsisVertical, Plus, Search, Settings2 } from 'lucide-react-native';
+import { EllipsisVertical, Minus, Pin, Plus, Scroll, Search, Settings2, Zap } from 'lucide-react-native';
 import { useCallback, useRef, useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider'; 
+import InputField from '@/components/InputField';
+import CustomButton from '@/components/CustomButton';
+import PriceInput from '@/components/PriceInput';
 
 const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handlePresentAddBottomSheet }: { searchQuery: string, setSearchQuery: (query: string) => void, handlePresentModalPress: () => void, handlePresentAddBottomSheet: ()=>void }) => {
     return (
@@ -64,6 +67,13 @@ const UserListings = () => {
                 };
         }
     };
+
+    // Add listing bottom sheet
+    const [addListingCategory, setAddListingCategory] = useState('Electronics');
+    const [addListingCondition, setAddListingCondition] = useState('New');
+    
+    const [addListingIsTrade, setaddListingIsTrade] = useState(false);
+    const toggleSwitch = () => setaddListingIsTrade(previousState => !previousState);
 
     // Fetch user listings summary data
     const { data: summaryData, loading: summaryLoading, error: summaryError } = useFetch<any>(
@@ -137,6 +147,7 @@ const UserListings = () => {
                             </TouchableOpacity>
                         ))}
                     </View>
+                    <View className='h-32'></View>
                 </ScrollView>
             </SafeAreaView>
             
@@ -166,7 +177,7 @@ const UserListings = () => {
                                             }))
                                         }
                                         className={`rounded-full py-2 px-4 ${
-                                            filters.status.includes(statusOption) ? 'bg-neutral-800' : 'bg-neutral-200'
+                                            filters.status.includes(statusOption) ? 'bg-neutral-800' : 'bg-neutral-100'
                                         }`}
                                     >
                                         <Text className={`font-PoppinsRegular text-neutral-900 ${filters.status.includes(statusOption) ? 'text-neutral-100' : ''}`}>
@@ -193,7 +204,7 @@ const UserListings = () => {
                                             }))
                                         }
                                         className={`rounded-full py-2 px-4 ${
-                                            filters.category.includes(categoryOption) ? 'bg-neutral-800' : 'bg-neutral-200'
+                                            filters.category.includes(categoryOption) ? 'bg-neutral-800' : 'bg-neutral-100'
                                         }`}
                                     >
                                         <Text className={`font-PoppinsRegular text-neutral-900 ${filters.category.includes(categoryOption) ? 'text-neutral-100' : ''}`}>
@@ -217,15 +228,100 @@ const UserListings = () => {
                         <Text>${price.min} - ${price.max}</Text>
                         
                     </View>
-                }
+                }                                                                                                                                                                                                                                                                                                                                                                                                                                   
             />
 
             {/* Add Listing Bottom Sheet */}
             <BottomSheetModalComponent
                 ref={addBottomSheetRef}
-                content={
+                content = {
                     <View>
-                        <Text>Add Listing</Text>
+                        <Text className='text-lg font-PoppinsSemiBold text-neutral-800 mb-4 text-center'>
+                             Add a Product
+                        </Text>
+                        <View>
+                            <InputField label='Title' placeholder='A descriptive listing title' maxLength={50} ></InputField>
+                            
+                            <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Price</Text>
+                            <PriceInput />
+                            <InputField label='Description' placeholder='Detailed listing description' maxLength={500} multiline={true} className='h-24'></InputField>
+                            
+                            <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Category</Text>
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 overflow-visible'>
+                                <View className='flex flex-row gap-2'>
+                                    {['Electronics', 'Furniture', 'Clothing', 'Textbooks', 'Vehicles', 'Housing', 'Sports'].map((categoryOption) => (
+                                        <TouchableOpacity
+                                            key={categoryOption}
+                                            onPress={() => setAddListingCategory(categoryOption)}
+                                            className={`rounded-full py-2 px-4 ${
+                                                addListingCategory === categoryOption ? 'bg-neutral-800' : 'bg-neutral-100'
+                                            }`}
+                                        >
+                                            <Text className={`font-PoppinsRegular text-neutral-900 ${addListingCategory === categoryOption ? 'text-neutral-100' : ''}`}>
+                                                {categoryOption}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View> 
+                            </ScrollView>
+
+                            <View className='flex flex-row items-center justify-between mb-4'>
+                                <Text className='text-neutral-900 text-md font-PoppinsMedium'>Open to trade?</Text>
+                                <Switch onValueChange={toggleSwitch} value={addListingIsTrade}                         />    
+                            </View>
+
+                            <InputField label='Location' placeholder='Search listing location' icon={Pin}></InputField>
+
+                            <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Condition (Optional)</Text>
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 overflow-visible'>
+                                <View className="flex flex-row gap-2">
+                                    {['New', 'Used', 'Refurbished'].map((conditionOption) => (
+                                        <TouchableOpacity
+                                        key={conditionOption}
+                                        onPress={() =>
+                                            setAddListingCondition((prev) => (prev === conditionOption ? '' : conditionOption))
+                                        }
+                                        className={`rounded-full py-2 px-4 ${
+                                            addListingCondition === conditionOption ? 'bg-neutral-800' : 'bg-neutral-100'
+                                        }`}
+                                        >
+                                        <Text
+                                            className={`font-PoppinsRegular ${
+                                                addListingCondition === conditionOption ? 'text-neutral-100' : 'text-neutral-900'
+                                            }`}
+                                        >
+                                            {conditionOption}
+                                        </Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
+                            </ScrollView>
+
+                            <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Images</Text>
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 gap-4 overflow-visible'>
+                                <View className="w-28 h-24 rounded-lg bg-neutral-100 items-center justify-center">
+                                    <Plus className='text-neutral-800' size={32} />
+                                </View>
+                                <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
+                                <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
+                                <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
+                                <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
+                            </ScrollView>
+                            
+                            
+                            <View className='rounded-xl flex flex-col items-center border-2 border-neutral-200 pb-4'>
+                                <View className='bg-neutral-200 p-4 rounded-xl flex flex-row items-center w-full'>
+                                    <Zap className='text-neutral-800 mr-3' size={36} />
+                                    <View>
+                                        <Text className='text-lg text-neutral-900 font-PoppinsMedium flex-wrap'>Power Boost</Text>
+                                        <Text className='text-sm text-neutral-500 font-PoppinsMedium flex-wrap'>Boost listing for more visibility</Text>
+                                    </View>
+                                    
+                                </View>
+
+                            
+                            </View>
+                        </View> 
                     </View>
                 }
             />
@@ -240,15 +336,8 @@ export default UserListings;
 
 /*
 TODO:
-    // Create a search bar
-    // Add a touchable opacity filter button that opens a filter bottom sheet modal
-    // Create a list of listings that belong to the logged in user (i.e listings that have the same user_id as the logged in user) from userListings API route
-    // If search is empty and no filters applied, show all users listings, else show filtered listings based on search and filters
-    // Filter bottom sheet modal should have the following filters:
-    // - Price range (min and max)
-    // - Status (active, pending, sold) as button type filter, multiple can be selected. On select, change the bacground color
-    // - Category (Same style as status filter)
-    // Use BottomSheetModal.tsx component for the filter modal
+    // MAke categories and status' dynamic in main page, and all bottom sheets (filters, add listing)
+    // Add listing bottom sheet
     // When a user clicks on a list item, create a new bottom sheet modal that shows the full listing details with a new api route that fetches the full listing details for that listing_id.
 
 */
