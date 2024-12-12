@@ -1,5 +1,5 @@
 import CustomButton from "@/components/CustomButton";
-import InputField from "@/components/InputField";
+import InputField from "@/components/Form/InputField";
 import OAuth from "@/components/OAuth";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, router, useRouter } from "expo-router";

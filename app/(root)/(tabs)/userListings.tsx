@@ -1,15 +1,16 @@
 import BottomSheetModalComponent from '@/components/BottomSheetModal';
 import { useFetch } from '@/lib/fetch';
 import { useUser } from '@clerk/clerk-expo';
-import BottomSheet, { BottomSheetModal } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { EllipsisVertical, Minus, Pin, Plus, Scroll, Search, Settings2, Zap } from 'lucide-react-native';
 import { useCallback, useRef, useState } from 'react';
 import { ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider'; 
-import InputField from '@/components/InputField';
+import InputField from '@/components/Form/InputField';
 import CustomButton from '@/components/CustomButton';
-import PriceInput from '@/components/PriceInput';
+import PriceInput from '@/components/Form/PriceInput';
+import SelectSlider, { ScrollSelect } from '@/components/Form/ScrollSelect';
 
 const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handlePresentAddBottomSheet }: { searchQuery: string, setSearchQuery: (query: string) => void, handlePresentModalPress: () => void, handlePresentAddBottomSheet: ()=>void }) => {
     return (
@@ -245,25 +246,22 @@ const UserListings = () => {
                             <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Price</Text>
                             <PriceInput />
                             <InputField label='Description' placeholder='Detailed listing description' maxLength={500} multiline={true} className='h-24'></InputField>
-                            
-                            <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Category</Text>
-                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 overflow-visible'>
-                                <View className='flex flex-row gap-2'>
-                                    {['Electronics', 'Furniture', 'Clothing', 'Textbooks', 'Vehicles', 'Housing', 'Sports'].map((categoryOption) => (
-                                        <TouchableOpacity
-                                            key={categoryOption}
-                                            onPress={() => setAddListingCategory(categoryOption)}
-                                            className={`rounded-full py-2 px-4 ${
-                                                addListingCategory === categoryOption ? 'bg-neutral-800' : 'bg-neutral-100'
-                                            }`}
-                                        >
-                                            <Text className={`font-PoppinsRegular text-neutral-900 ${addListingCategory === categoryOption ? 'text-neutral-100' : ''}`}>
-                                                {categoryOption}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    ))}
-                                </View> 
-                            </ScrollView>
+
+                            <ScrollSelect
+                            label="Category"
+                            options={['Electronics', 'Furniture', 'Clothing', 'Textbooks', 'Vehicles', 'Housing', 'Sports']}
+                            selectedValues={addListingCategory}
+                            onChange={(value) => setAddListingCategory(value as string)}
+                            required={true} // Will default to first option and prevent deselection
+                            />
+
+                            <ScrollSelect
+                            label="Condition"
+                            options={['New', 'Used', 'Refurbished']}
+                            selectedValues={addListingCondition}
+                            onChange={(value) => setAddListingCondition(value as string)}
+                            required={false} // Allows no selection
+                            />
 
                             <View className='flex flex-row items-center justify-between mb-4'>
                                 <Text className='text-neutral-900 text-md font-PoppinsMedium'>Open to trade?</Text>
@@ -272,30 +270,6 @@ const UserListings = () => {
 
                             <InputField label='Location' placeholder='Search listing location' icon={Pin}></InputField>
 
-                            <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Condition (Optional)</Text>
-                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 overflow-visible'>
-                                <View className="flex flex-row gap-2">
-                                    {['New', 'Used', 'Refurbished'].map((conditionOption) => (
-                                        <TouchableOpacity
-                                        key={conditionOption}
-                                        onPress={() =>
-                                            setAddListingCondition((prev) => (prev === conditionOption ? '' : conditionOption))
-                                        }
-                                        className={`rounded-full py-2 px-4 ${
-                                            addListingCondition === conditionOption ? 'bg-neutral-800' : 'bg-neutral-100'
-                                        }`}
-                                        >
-                                        <Text
-                                            className={`font-PoppinsRegular ${
-                                                addListingCondition === conditionOption ? 'text-neutral-100' : 'text-neutral-900'
-                                            }`}
-                                        >
-                                            {conditionOption}
-                                        </Text>
-                                        </TouchableOpacity>
-                                    ))}
-                                </View>
-                            </ScrollView>
 
                             <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Images</Text>
                             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 gap-4 overflow-visible'>
@@ -309,18 +283,31 @@ const UserListings = () => {
                             </ScrollView>
                             
                             
-                            <View className='rounded-xl flex flex-col items-center border-2 border-neutral-200 pb-4'>
-                                <View className='bg-neutral-200 p-4 rounded-xl flex flex-row items-center w-full'>
-                                    <Zap className='text-neutral-800 mr-3' size={36} />
-                                    <View>
-                                        <Text className='text-lg text-neutral-900 font-PoppinsMedium flex-wrap'>Power Boost</Text>
-                                        <Text className='text-sm text-neutral-500 font-PoppinsMedium flex-wrap'>Boost listing for more visibility</Text>
-                                    </View>
-                                    
+                            <View className='bg-neutral-200 p-4 rounded-xl flex flex-row items-center w-full'>
+                                <Zap className='text-neutral-800 mr-3' size={36} />
+                                <View>
+                                    <Text className='text-lg text-neutral-900 font-PoppinsMedium flex-wrap'>Power Boost</Text>
+                                    <Text className='text-sm text-neutral-500 font-PoppinsMedium flex-wrap'>Boost listing for more visibility</Text>
                                 </View>
+                                
+                            </View>
+
+                            <Text className='text-lg text-neutral-900 font-PoppinsMedium flex-wrap'>12 hrs</Text>
+                            <Text className=''></Text>
+
+                            <Slider
+                                minimumValue={0}
+                                maximumValue={10000}
+                                step={10}
+                                value={price.max}
+                                onValueChange={(value) => setFilters((prev) => ({ ...prev, price: { ...prev.price, max: value } }))}
+                            />
 
                             
-                            </View>
+
+
+
+                            
                         </View> 
                     </View>
                 }

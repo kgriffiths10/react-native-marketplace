@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 
 type BottomSheetModalComponentProps = {
   content?: React.ReactNode;
@@ -29,12 +29,12 @@ const BottomSheetModalComponent = forwardRef<BottomSheetModal, BottomSheetModalC
         backdropComponent={renderBackdrop}
         backgroundStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 28 }}
       >
-        <BottomSheetView>
+        <BottomSheetScrollView>
             <View className='p-8'>
                 {content || <Text>Default Content</Text>}
             </View>
           
-        </BottomSheetView>
+        </BottomSheetScrollView>
       </BottomSheetModal>
     );
   }

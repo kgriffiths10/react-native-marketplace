@@ -1,4 +1,4 @@
-import InputField from '@/components/InputField';
+import InputField from '@/components/Form/InputField';
 import { Alert, Image, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View, } from 'react-native';
 import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
