@@ -70,11 +70,3 @@ export default function RootLayout() {
 
   );
 }
-
-{/* 
-I need the bottom sheet modal on
-  
-<GestureHandlerRootView>
-<BottomSheetModalProvider> 
-
-*/}
