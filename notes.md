@@ -5,6 +5,9 @@
 
 stop the server from running, `clear` the server, then `npx expo start -c` which runs it with a clear cache.
 
+
+
+
 git reset --hard 0549c6231c121947223ebad78c5b320a023e604c
 >> 
 HEAD is now at 0549c62 dependency version reset

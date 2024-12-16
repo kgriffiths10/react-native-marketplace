@@ -1,14 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-
-interface ScrollSelectProps {
-  label: string;
-  options: string[];
-  selectedValues: string | string[];
-  onChange: (value: string | string[]) => void;
-  multiple?: boolean;
-  required?: boolean;
-}
+import { ScrollSelectProps } from '@/types/type';
 
 export const ScrollSelect = ({
   label,
@@ -60,9 +52,10 @@ export const ScrollSelect = ({
 
   return (
     <>
-      <Text className='input-form-label'>
+      <Text className='heading-3 mb-2'>
         {label} {required && <Text className="text-red-500">*</Text>}
       </Text>
+      
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 overflow-visible'>
         <View className='flex flex-row gap-2'>
           {options.map((option) => (

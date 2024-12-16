@@ -5,9 +5,11 @@ module.exports = {
     "./app/**/*.{js,jsx,ts,tsx}", // Adjust paths according to your project structure
     "./components/**/*.{js,jsx,ts,tsx}",
   ],
+  presets: [require("nativewind/preset")],
   theme: {
     extend: {
       fontFamily : {
+        sans: ['Poppins', 'sans-serif'],
         Poppins: ['Poppins', 'sans-serif'],
         PoppinsBold: ['Poppins-Bold', 'sans-serif'],
         PoppinsMedium: ['Poppins-Medium', 'sans-serif'],

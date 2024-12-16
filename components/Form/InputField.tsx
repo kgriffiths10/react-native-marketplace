@@ -3,18 +3,16 @@ import { Image, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, Touch
 import { InputFieldProps } from "@/types/type";
 import { Icon } from "lucide-react-native";
 
-const InputField = ({label, labelStyle,  icon: IconComponent, secureTextEntry = false, containerStyle, inputStyle, iconStyle, className, ...props}: InputFieldProps) => {
+const InputField = ({label, labelStyle,  icon: IconComponent, secureTextEntry = false, containerStyle, inputStyle, iconStyle, className, required, ...props}: InputFieldProps) => {
     
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View className="w-full">
                     {/* Label */}
-                    {label && (
-                        <Text className={`text-neutral-900 text-md font-PoppinsMedium mb-2 ${labelStyle}`}>
-                        {label}
-                        </Text>
-                    )}
+                    <Text className='heading-3 mb-2'>
+                    {   label} {required && <Text className="text-red-500">*</Text>}
+                    </Text>
 
                     {/* Input Container */}
                     <View className={`flex flex-row justify-start items-center relative rounded-xl border border-gray-300 focus:border-primary-400 mb-4 w-full ${containerStyle}`}>

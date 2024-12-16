@@ -1,4 +1,4 @@
-import BottomSheetModalComponent from '@/components/BottomSheetModal';
+import BottomSheetModalComponent from '@/components/BottomSheets/BottomSheetModal';
 import { useFetch } from '@/lib/fetch';
 import { useUser } from '@clerk/clerk-expo';
 import BottomSheet, { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
@@ -11,12 +11,21 @@ import InputField from '@/components/Form/InputField';
 import CustomButton from '@/components/CustomButton';
 import PriceInput from '@/components/Form/PriceInput';
 import SelectSlider, { ScrollSelect } from '@/components/Form/ScrollSelect';
+import { cssInterop } from 'nativewind';
+
+cssInterop(Settings2, {
+    className: {
+        target: 'style'
+    }
+});
+
 
 const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handlePresentAddBottomSheet }: { searchQuery: string, setSearchQuery: (query: string) => void, handlePresentModalPress: () => void, handlePresentAddBottomSheet: ()=>void }) => {
     return (
         <View className="flex flex-row gap-2 mb-8">
             <View className="flex flex-row flex-1 border-neutral-300 border rounded-full align-center justify-start p-3">
-                <Search className="text-neutral-800 w-12 h-12 mr-4" />
+                <Search className='stroke-neutral-400 mr-2' />
+
                 <TextInput
                     placeholder="Search Listings"
                     className="text-neutral-800 w-full"
@@ -25,10 +34,10 @@ const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handl
                 />
             </View>
             <TouchableOpacity className="border-neutral-300 border rounded-full align-center justify-center p-3" onPress={handlePresentModalPress}>
-                <Settings2 className="text-neutral-800 w-12 h-12" />
+                <Settings2 className='stroke-neutral-800' />
             </TouchableOpacity>
             <TouchableOpacity className="bg-primary-400 rounded-full align-center justify-center p-3" onPress={handlePresentAddBottomSheet}>
-                <Plus className="text-neutral-100 w-12 h-12" />
+                <Plus className="stroke-neutral-100" />
             </TouchableOpacity>
             
         </View>
@@ -70,9 +79,13 @@ const UserListings = () => {
     };
 
     // Add listing bottom sheet
+    const addListingBottomSheetRef = useRef<BottomSheetModal>(null);
+    const handlePresentAddBottomSheet = useCallback(() => {
+        addListingBottomSheetRef.current?.present();
+    }, []);
+    
     const [addListingCategory, setAddListingCategory] = useState('Electronics');
     const [addListingCondition, setAddListingCondition] = useState('New');
-    
     const [addListingIsTrade, setaddListingIsTrade] = useState(false);
     const toggleSwitch = () => setaddListingIsTrade(previousState => !previousState);
 
@@ -109,17 +122,13 @@ const UserListings = () => {
         console.log('handleSheetChanges', index);
     }, []);
 
-    // Add Listing Bottom Sheet
-    const addBottomSheetRef = useRef<BottomSheetModal>(null);
-    const handlePresentAddBottomSheet = useCallback(() => {
-        addBottomSheetRef.current?.present();
-    }, []);
+
 
 
     return (
         <View className='flex flex-1'>
             <SafeAreaView className="flex-1 bg-white p-4">
-                <Text className="text-lg font-PoppinsSemiBold text-neutral-800 mb-2">
+                <Text className="heading-1">
                     Your Listings
                 </Text>
                 <SearchBar 
@@ -131,15 +140,15 @@ const UserListings = () => {
                 <ScrollView>
                     <View>
                         {filteredListings?.map((listing: any) => (
-                            <TouchableOpacity key={listing.listing_id} className="w-full">
-                                <View className="border-t border-neutral-300 py-4 flex flex-row">
-                                    <View className="mr-4 w-24 rounded-lg bg-neutral-100"></View>
+                            <TouchableOpacity key={listing.listing_id} className="w-full mb-4">
+                                <View className="rounded-2xl bg-neutral-100 p-4 flex flex-row">
+                                    <View className="mr-4 w-28 rounded-lg bg-white"></View>
                                     <View className='flex-1'>
-                                        <Text className="text-md font-PoppinsSemiBold text-neutral-900" numberOfLines={1} ellipsizeMode="tail">{listing.title}</Text>
-                                        <Text className="mb-2 text-md font-PoppinsRegular text-neutral-900">${listing.price}</Text>
+                                        <Text className="heading-2" numberOfLines={1} ellipsizeMode="tail">{listing.title}</Text>
+                                        <Text className="heading-3-light mb-1">${listing.price}</Text>
                                         {/* <Text className="text-sm font-PoppinsRegular text-neutral-400">{listing.category_name}</Text> */}
-                                        <View className={`self-start rounded-md border ${statusStyles(listing.status).view} px-2 py-1`}>
-                                            <Text className={`text-xs font-PoppinsMedium ${statusStyles(listing.status).text}`}>{listing.status}</Text>
+                                        <View className={`self-start rounded-full border ${statusStyles(listing.status).view} px-3 py-1`}>
+                                            <Text className={`text-sm font-PoppinsMedium ${statusStyles(listing.status).text}`}>{listing.status}</Text>
                                         </View>
                                           
                                     </View>
@@ -234,80 +243,57 @@ const UserListings = () => {
 
             {/* Add Listing Bottom Sheet */}
             <BottomSheetModalComponent
-                ref={addBottomSheetRef}
+                ref={addListingBottomSheetRef}
                 content = {
                     <View>
                         <Text className='text-lg font-PoppinsSemiBold text-neutral-800 mb-4 text-center'>
                              Add a Product
                         </Text>
                         <View>
-                            <InputField label='Title' placeholder='A descriptive listing title' maxLength={50} ></InputField>
-                            
-                            <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Price</Text>
-                            <PriceInput />
-                            <InputField label='Description' placeholder='Detailed listing description' maxLength={500} multiline={true} className='h-24'></InputField>
-
+                            <InputField label='Title' placeholder='A descriptive listing title' maxLength={50} required={true}></InputField>
+                            <PriceInput label='Price' required={true}/>
+                            <InputField label='Description' placeholder='Detailed listing description' maxLength={500} multiline={true} className='h-24' required={true}></InputField>
                             <ScrollSelect
-                            label="Category"
-                            options={['Electronics', 'Furniture', 'Clothing', 'Textbooks', 'Vehicles', 'Housing', 'Sports']}
-                            selectedValues={addListingCategory}
-                            onChange={(value) => setAddListingCategory(value as string)}
-                            required={true} // Will default to first option and prevent deselection
+                                label="Category"
+                                options={['Electronics', 'Furniture', 'Clothing', 'Textbooks', 'Vehicles', 'Housing', 'Sports']}
+                                selectedValues={addListingCategory}
+                                onChange={(value) => setAddListingCategory(value as string)}
+                                required={true} // Will default to first option and prevent deselection
                             />
-
                             <ScrollSelect
-                            label="Condition"
-                            options={['New', 'Used', 'Refurbished']}
-                            selectedValues={addListingCondition}
-                            onChange={(value) => setAddListingCondition(value as string)}
-                            required={false} // Allows no selection
+                                label="Condition"
+                                options={['New', 'Used', 'Refurbished']}
+                                selectedValues={addListingCondition}
+                                onChange={(value) => setAddListingCondition(value as string)}
+                                required={false} // Allows no selection
                             />
-
                             <View className='flex flex-row items-center justify-between mb-4'>
-                                <Text className='text-neutral-900 text-md font-PoppinsMedium'>Open to trade?</Text>
+                                <Text className='heading-3'>Open to trade?</Text>
                                 <Switch onValueChange={toggleSwitch} value={addListingIsTrade}                         />    
                             </View>
 
-                            <InputField label='Location' placeholder='Search listing location' icon={Pin}></InputField>
-
-
-                            <Text className='text-neutral-900 text-md font-PoppinsMedium mb-2'>Images</Text>
+                            <InputField label='Location' placeholder='Enter listing location' required={true}></InputField>
+                            
+                            <Text className='heading-3 mb-2'>Images</Text>
                             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 gap-4 overflow-visible'>
-                                <View className="w-28 h-24 rounded-lg bg-neutral-100 items-center justify-center">
+                                <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 items-center justify-center">
                                     <Plus className='text-neutral-800' size={32} />
                                 </View>
-                                <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
-                                <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
-                                <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
+                                <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
+                                <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
+                                <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
                                 <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
                             </ScrollView>
                             
-                            
-                            <View className='bg-neutral-200 p-4 rounded-xl flex flex-row items-center w-full'>
-                                <Zap className='text-neutral-800 mr-3' size={36} />
-                                <View>
-                                    <Text className='text-lg text-neutral-900 font-PoppinsMedium flex-wrap'>Power Boost</Text>
-                                    <Text className='text-sm text-neutral-500 font-PoppinsMedium flex-wrap'>Boost listing for more visibility</Text>
+                            {/* Buttons */}
+                            <View className='flex flex-col gap-4 mt-6'>
+                                <CustomButton title='Add Listing' onPress={()=>{}}></CustomButton>
+                                <View className='flex flex-row gap-4'>
+                                    <CustomButton title='Save Draft' bgVariant='outline' textVariant='primary' onPress={()=>{}} className='flex-1'></CustomButton>
+                                    <CustomButton title='Cancel' bgVariant='danger' textVariant='danger' onPress={()=>{}} className='flex-1'></CustomButton>
                                 </View>
-                                
                             </View>
 
-                            <Text className='text-lg text-neutral-900 font-PoppinsMedium flex-wrap'>12 hrs</Text>
-                            <Text className=''></Text>
-
-                            <Slider
-                                minimumValue={0}
-                                maximumValue={10000}
-                                step={10}
-                                value={price.max}
-                                onValueChange={(value) => setFilters((prev) => ({ ...prev, price: { ...prev.price, max: value } }))}
-                            />
-
-                            
-
-
-
-                            
                         </View> 
                     </View>
                 }

@@ -6,7 +6,7 @@ import {
   BottomSheetView,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
-import BottomSheetModalComponent from '@/components/BottomSheetModal';
+import BottomSheetModalComponent from '@/components/BottomSheets/BottomSheetModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Messages = () => {

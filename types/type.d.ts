@@ -19,4 +19,13 @@ declare interface InputFieldProps extends TextInputProps {
   inputStyle?: string;
   iconStyle?: string;
   className?: string;
+  required?: boolean;
+}
+declare interface ScrollSelectProps {
+  label: string;
+  options: string[];
+  selectedValues: string | string[];
+  onChange: (value: string | string[]) => void;
+  multiple?: boolean;
+  required?: boolean;
 }
