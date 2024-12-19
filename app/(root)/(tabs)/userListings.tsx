@@ -2,23 +2,13 @@ import BottomSheetModalComponent from '@/components/BottomSheets/BottomSheetModa
 import { useFetch } from '@/lib/fetch';
 import { useUser } from '@clerk/clerk-expo';
 import BottomSheet, { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { EllipsisVertical, Minus, Pin, Plus, Scroll, Search, Settings2, Zap } from 'lucide-react-native';
+import { Plus, Search, Settings2 } from '@/lib/icons';
 import { useCallback, useRef, useState } from 'react';
 import { ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider'; 
-import InputField from '@/components/Form/InputField';
-import CustomButton from '@/components/CustomButton';
-import PriceInput from '@/components/Form/PriceInput';
-import SelectSlider, { ScrollSelect } from '@/components/Form/ScrollSelect';
-import { cssInterop } from 'nativewind';
 
-cssInterop(Settings2, {
-    className: {
-        target: 'style'
-    }
-});
-
+import AddListing from '@/components/BottomSheets/AddListing';
 
 const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handlePresentAddBottomSheet }: { searchQuery: string, setSearchQuery: (query: string) => void, handlePresentModalPress: () => void, handlePresentAddBottomSheet: ()=>void }) => {
     return (
@@ -37,9 +27,8 @@ const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handl
                 <Settings2 className='stroke-neutral-800' />
             </TouchableOpacity>
             <TouchableOpacity className="bg-primary-400 rounded-full align-center justify-center p-3" onPress={handlePresentAddBottomSheet}>
-                <Plus className="stroke-neutral-100" />
+                <Plus className='stroke-neutral-100' />
             </TouchableOpacity>
-            
         </View>
     );
 };
@@ -78,17 +67,13 @@ const UserListings = () => {
         }
     };
 
-    // Add listing bottom sheet
+    // Add Listing Bottom Sheet 
     const addListingBottomSheetRef = useRef<BottomSheetModal>(null);
-    const handlePresentAddBottomSheet = useCallback(() => {
+    const handlePresentAddListingBottomSheet = useCallback(() => {
         addListingBottomSheetRef.current?.present();
     }, []);
-    
-    const [addListingCategory, setAddListingCategory] = useState('Electronics');
-    const [addListingCondition, setAddListingCondition] = useState('New');
-    const [addListingIsTrade, setaddListingIsTrade] = useState(false);
-    const toggleSwitch = () => setaddListingIsTrade(previousState => !previousState);
 
+    
     // Fetch user listings summary data
     const { data: summaryData, loading: summaryLoading, error: summaryError } = useFetch<any>(
         `/(api)/listings/userListings?clerkID=${clerkID}`
@@ -135,7 +120,7 @@ const UserListings = () => {
                     searchQuery={searchQuery} 
                     setSearchQuery={(query) => setFilters({ ...filters, searchQuery: query })} 
                     handlePresentModalPress={handlePresentModalPress} 
-                    handlePresentAddBottomSheet={handlePresentAddBottomSheet}
+                    handlePresentAddBottomSheet={handlePresentAddListingBottomSheet}
                 />
                 <ScrollView>
                     <View>
@@ -145,7 +130,7 @@ const UserListings = () => {
                                     <View className="mr-4 w-28 rounded-lg bg-white"></View>
                                     <View className='flex-1'>
                                         <Text className="heading-2" numberOfLines={1} ellipsizeMode="tail">{listing.title}</Text>
-                                        <Text className="heading-3-light mb-1">${listing.price}</Text>
+                                        <Text className="text-base-light mb-1">${listing.price}</Text>
                                         {/* <Text className="text-sm font-PoppinsRegular text-neutral-400">{listing.category_name}</Text> */}
                                         <View className={`self-start rounded-full border ${statusStyles(listing.status).view} px-3 py-1`}>
                                             <Text className={`text-sm font-PoppinsMedium ${statusStyles(listing.status).text}`}>{listing.status}</Text>
@@ -242,62 +227,8 @@ const UserListings = () => {
             />
 
             {/* Add Listing Bottom Sheet */}
-            <BottomSheetModalComponent
-                ref={addListingBottomSheetRef}
-                content = {
-                    <View>
-                        <Text className='text-lg font-PoppinsSemiBold text-neutral-800 mb-4 text-center'>
-                             Add a Product
-                        </Text>
-                        <View>
-                            <InputField label='Title' placeholder='A descriptive listing title' maxLength={50} required={true}></InputField>
-                            <PriceInput label='Price' required={true}/>
-                            <InputField label='Description' placeholder='Detailed listing description' maxLength={500} multiline={true} className='h-24' required={true}></InputField>
-                            <ScrollSelect
-                                label="Category"
-                                options={['Electronics', 'Furniture', 'Clothing', 'Textbooks', 'Vehicles', 'Housing', 'Sports']}
-                                selectedValues={addListingCategory}
-                                onChange={(value) => setAddListingCategory(value as string)}
-                                required={true} // Will default to first option and prevent deselection
-                            />
-                            <ScrollSelect
-                                label="Condition"
-                                options={['New', 'Used', 'Refurbished']}
-                                selectedValues={addListingCondition}
-                                onChange={(value) => setAddListingCondition(value as string)}
-                                required={false} // Allows no selection
-                            />
-                            <View className='flex flex-row items-center justify-between mb-4'>
-                                <Text className='heading-3'>Open to trade?</Text>
-                                <Switch onValueChange={toggleSwitch} value={addListingIsTrade}                         />    
-                            </View>
-
-                            <InputField label='Location' placeholder='Enter listing location' required={true}></InputField>
-                            
-                            <Text className='heading-3 mb-2'>Images</Text>
-                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 gap-4 overflow-visible'>
-                                <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 items-center justify-center">
-                                    <Plus className='text-neutral-800' size={32} />
-                                </View>
-                                <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
-                                <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
-                                <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
-                                <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
-                            </ScrollView>
-                            
-                            {/* Buttons */}
-                            <View className='flex flex-col gap-4 mt-6'>
-                                <CustomButton title='Add Listing' onPress={()=>{}}></CustomButton>
-                                <View className='flex flex-row gap-4'>
-                                    <CustomButton title='Save Draft' bgVariant='outline' textVariant='primary' onPress={()=>{}} className='flex-1'></CustomButton>
-                                    <CustomButton title='Cancel' bgVariant='danger' textVariant='danger' onPress={()=>{}} className='flex-1'></CustomButton>
-                                </View>
-                            </View>
-
-                        </View> 
-                    </View>
-                }
-            />
+            <AddListing ref={addListingBottomSheetRef} />
+            
         </View>
     );
 };

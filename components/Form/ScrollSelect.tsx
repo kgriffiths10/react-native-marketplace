@@ -4,6 +4,7 @@ import { ScrollSelectProps } from '@/types/type';
 
 export const ScrollSelect = ({
   label,
+  value,
   options,
   selectedValues,
   onChange,

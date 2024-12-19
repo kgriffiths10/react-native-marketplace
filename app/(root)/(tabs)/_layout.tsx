@@ -34,11 +34,11 @@ const TabsLayout = () => {
 						borderTopWidth: 0,
 					},
 				}}>
-					<Tabs.Screen name="favListings" options={{title: "Favorite Listings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<Heart size={28} className={focused ? 'text-gray-200' : 'text-gray-400'} />}/>}} />
-					<Tabs.Screen name="userListings" options={{title: "Your Listings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<ListPlus size={28} className={focused ? 'text-gray-200' : 'text-gray-400'} />}/>}} />
-					<Tabs.Screen name="marketplace" options={{title: "Marketplace", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<Search size={28} className={focused ? 'text-gray-200' : 'text-gray-400'} />}/>}} /> 
-					<Tabs.Screen name="messages" options={{title: "Messages", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<MessageCircleMore size={28} className={focused ? 'text-gray-200' : 'text-gray-400'} />}/>}} />
-					<Tabs.Screen name="settings" options={{title: "Settings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<Settings size={28} className={focused ? 'text-gray-200' : 'text-gray-400'} />}/>}} />
+					<Tabs.Screen name="favListings" options={{title: "Favorite Listings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<Heart size={28} className={focused ? 'text-gray-100' : 'text-gray-400'} />}/>}} />
+					<Tabs.Screen name="userListings" options={{title: "Your Listings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<ListPlus size={28} className={focused ? 'text-gray-100' : 'text-gray-400'} />}/>}} />
+					<Tabs.Screen name="marketplace" options={{title: "Marketplace", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<Search size={28} className={focused ? 'text-gray-100' : 'text-gray-400'} />}/>}} /> 
+					<Tabs.Screen name="messages" options={{title: "Messages", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<MessageCircleMore size={28} className={focused ? 'text-gray-100' : 'text-gray-400'} />}/>}} />
+					<Tabs.Screen name="settings" options={{title: "Settings", headerShown: false, tabBarIcon: ({ focused}) => <TabIcon focused={focused} source={<Settings size={28} className={focused ? 'text-gray-100' : 'text-gray-400'} />}/>}} />
 				</Tabs>
 				
 			</BottomSheetModalProvider>

@@ -14,7 +14,16 @@
   @apply text-base font-PoppinsMedium text-neutral-800;;
 }
 
-.heading-3-light {
+.text-base-regular {
+  @apply text-base font-PoppinsRegular text-neutral-800;
+}
+.text-base-light {
   @apply text-base font-PoppinsRegular text-neutral-500;
 }
 
+.text-sm-light {
+  @apply text-sm font-PoppinsRegular text-neutral-500;
+}
+.text-sm-regular {
+  @apply text-sm font-PoppinsRegular text-neutral-800;
+}

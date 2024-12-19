@@ -10,8 +10,8 @@ const InputField = ({label, labelStyle,  icon: IconComponent, secureTextEntry = 
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View className="w-full">
                     {/* Label */}
-                    <Text className='heading-3 mb-2'>
-                    {   label} {required && <Text className="text-red-500">*</Text>}
+                    <Text className={`heading-3 mb-2 ${labelStyle}`}>
+                        {label} {required && <Text className="text-red-500">*</Text>}
                     </Text>
 
                     {/* Input Container */}
@@ -26,3 +26,5 @@ const InputField = ({label, labelStyle,  icon: IconComponent, secureTextEntry = 
 }
 
 export default InputField;
+
+// TODO: for all fields using lucide icons, make sure ituses the cssInterop icons.ts from lib.

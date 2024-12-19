@@ -31,8 +31,8 @@ const Welcome = () => {
                     <View key={item.id} className='flex items-center justify-center p-5 mt-48'>
                         {/* Add image */}
                         <View className='flex items-center justify-center'>
-                            <Text className='text-gray-900 text-3xl font-PoppinsSemiBold text-center mx-2'>{item.title}</Text>
-                            <Text className='text-md font-PoppinsRegular text-center mt-4 mx-4 text-gray-400'>{item.description}</Text>
+                            <Text className='text-neutral-800 text-3xl font-PoppinsMedium text-center mx-2'>{item.title}</Text>
+                            <Text className='text-md font-PoppinsRegular text-center mt-4 mx-4 text-neutral-400'>{item.description}</Text>
                         </View>
                     </View>
                 ))}

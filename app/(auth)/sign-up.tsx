@@ -37,7 +37,7 @@ const SignUp = () => {
           return
         }
         try {
-            await signUp.create({ emailAddress: form.email, password: form.password, });
+            await signUp.create({ emailAddress: form.email, password: form.password, firstName: form.firstName, lastName: form.lastName });
             await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
             setVerification({ ...verification, state: 'pending' });
 
