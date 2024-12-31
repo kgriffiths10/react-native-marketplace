@@ -19,7 +19,7 @@ export const ScrollSelect = ({
         onChange(options[0]);
       }
     }
-  }, []);
+  }, [required, options, multiple, selectedValues, onChange]);
 
   const isSelected = (option: string) => {
     if (multiple) {

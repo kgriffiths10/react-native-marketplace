@@ -9,6 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Slider from '@react-native-community/slider'; 
 
 import AddListing from '@/components/BottomSheets/AddListing';
+import EditListing from '@/components/BottomSheets/EditListing';
 
 const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handlePresentAddBottomSheet }: { searchQuery: string, setSearchQuery: (query: string) => void, handlePresentModalPress: () => void, handlePresentAddBottomSheet: ()=>void }) => {
     return (
@@ -67,16 +68,24 @@ const UserListings = () => {
         }
     };
 
-    // Add Listing Bottom Sheet 
+    // AddListing Bottom Sheet 
     const addListingBottomSheetRef = useRef<BottomSheetModal>(null);
     const handlePresentAddListingBottomSheet = useCallback(() => {
         addListingBottomSheetRef.current?.present();
     }, []);
 
+    // EditListing Bottom Sheet
+    const editListingBottomSheetRef = useRef<BottomSheetModal>(null);
+    const [selectedListing, setSelectedListing] = useState<any>(null);
+    const handlePresentEditListingBottomSheet = useCallback((listing: any) => {
+        setSelectedListing(listing);
+        editListingBottomSheetRef.current?.present();
+    }, []);
+
     
     // Fetch user listings summary data
     const { data: summaryData, loading: summaryLoading, error: summaryError } = useFetch<any>(
-        `/(api)/listings/userListings?clerkID=${clerkID}`
+        `/(api)/user/userListings?clerkID=${clerkID}`
     );
 
     // console.log('summaryData:', summaryData);
@@ -125,7 +134,11 @@ const UserListings = () => {
                 <ScrollView>
                     <View>
                         {filteredListings?.map((listing: any) => (
-                            <TouchableOpacity key={listing.listing_id} className="w-full mb-4">
+                            <TouchableOpacity 
+                                key={listing.listing_id} 
+                                className="w-full mb-4"
+                                onPress={() => handlePresentEditListingBottomSheet(listing)}
+                            >
                                 <View className="rounded-2xl bg-neutral-100 p-4 flex flex-row">
                                     <View className="mr-4 w-28 rounded-lg bg-white"></View>
                                     <View className='flex-1'>
@@ -228,6 +241,12 @@ const UserListings = () => {
 
             {/* Add Listing Bottom Sheet */}
             <AddListing ref={addListingBottomSheetRef} />
+
+            {/* Edit Listing Bottom Sheet */}
+            <EditListing 
+                ref={editListingBottomSheetRef} 
+                listingId={selectedListing?.listing_id}
+            />
             
         </View>
     );

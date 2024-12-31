@@ -35,7 +35,7 @@ const PriceField = ({
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View className="w-full">
+                <View className="w-full mb-2">
                     {/* Label */}
                     <Text className={`heading-3 mb-2 ${labelStyle}`}>
                         {label} ({currency}) {required && <Text className="text-red-500">* </Text>}

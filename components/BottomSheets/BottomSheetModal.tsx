@@ -4,10 +4,11 @@ import { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, Bottom
 
 type BottomSheetModalComponentProps = {
   content?: React.ReactNode;
+  snapPoints?: string[]; // Add snapPoints prop
 };
 
 const BottomSheetModalComponent = forwardRef<BottomSheetModal, BottomSheetModalComponentProps>(
-  ({ content }, ref) => {
+  ({ content, snapPoints }, ref) => { // Remove default snapPoints
 
     const renderBackdrop = useCallback(
         (props: BottomSheetBackdropProps) => (
@@ -28,10 +29,11 @@ const BottomSheetModalComponent = forwardRef<BottomSheetModal, BottomSheetModalC
         enableDynamicSizing={true}
         backdropComponent={renderBackdrop}
         backgroundStyle={{ borderTopLeftRadius: 32, borderTopRightRadius: 28 }}
+        snapPoints={snapPoints} // Pass snapPoints to BottomSheetModal
       >
         <BottomSheetScrollView>
             <View className='p-8'>
-                {content || <Text>Default Content</Text>}
+                {content || <Text>No Content Available</Text>}
             </View>
           
         </BottomSheetScrollView>

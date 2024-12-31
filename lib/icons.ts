@@ -14,6 +14,21 @@ import {
   Zap,
   Rocket,
   Info,
+  CarFront, 
+  CircleEllipsis, 
+  Dumbbell, 
+  Heater, 
+  House, 
+  MonitorSmartphone, 
+  NotebookText, 
+  Route, 
+  Shirt, 
+  Sofa,
+  MapPinned,
+  Heart,
+  ListPlus,
+  MessageCircleMore,
+  Settings,
  } from 'lucide-react-native';
 import { cssInterop } from 'nativewind';
 
@@ -44,6 +59,22 @@ interopIcon(Settings2);
 interopIcon(Zap);
 interopIcon(Rocket);
 interopIcon(Info);
+interopIcon(CarFront);
+interopIcon(CircleEllipsis);
+interopIcon(Dumbbell);
+interopIcon(Heater);
+interopIcon(House);
+interopIcon(MonitorSmartphone);
+interopIcon(NotebookText);
+interopIcon(Route);
+interopIcon(Shirt);
+interopIcon(Sofa);
+interopIcon(MapPinned);
+interopIcon(Heart);
+interopIcon(ListPlus);
+interopIcon(MessageCircleMore);
+interopIcon(Settings);
+
 
 export { 
   AlertCircle, 
@@ -60,4 +91,19 @@ export {
   Zap,
   Rocket, 
   Info,
+  CarFront, 
+  CircleEllipsis, 
+  Dumbbell, 
+  Heater, 
+  House, 
+  MonitorSmartphone, 
+  NotebookText, 
+  Route, 
+  Shirt, 
+  Sofa,
+  MapPinned,
+  Heart,
+  ListPlus,
+  MessageCircleMore,
+  Settings,
 };

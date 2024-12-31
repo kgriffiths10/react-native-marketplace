@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { CarFront, CircleEllipsis, Dumbbell, Heater, House, Icon, MonitorSmartphone, NotebookText, Route, Shirt, Sofa } from 'lucide-react-native'; 
+import { CarFront, CircleEllipsis, Dumbbell, Heater, House, MonitorSmartphone, NotebookText, Route, Shirt, Sofa } from 'lib/icons'; 
 import { useFetch } from '@/lib/fetch';
 
 const iconMapping: { [key: string]: React.ComponentType<any> } = {
@@ -24,9 +24,10 @@ interface Category {
 // Accept onCategorySelect as a prop
 interface CategoryScrollProps {
   onCategorySelect: (category: string | null) => void;
+  className?: string;
 }
 
-const CategoryScroll: React.FC<CategoryScrollProps> = ({ onCategorySelect }) => {
+const CategoryScroll: React.FC<CategoryScrollProps> = ({ onCategorySelect, className }) => {
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 	const { data: categories, loading, error } = useFetch<Category[]>('/(api)/categories');
 
@@ -37,10 +38,10 @@ const CategoryScroll: React.FC<CategoryScrollProps> = ({ onCategorySelect }) => 
 		  setSelectedCategory(defaultCategory);
 		  onCategorySelect(defaultCategory); // Notify the parent component
 		}
-	}, [categories, onCategorySelect]);
+	}, [categories]); 
 
 	if (loading) {
-		return;
+		return null; 
 	}
 	if (error) {
 		return <Text>Error fetching categories</Text>;
@@ -53,31 +54,32 @@ const CategoryScroll: React.FC<CategoryScrollProps> = ({ onCategorySelect }) => 
 
 	return (
 		<ScrollView
-		className="flex flex-row overflow-visible gap-4 "
-		horizontal={true}
-		decelerationRate={0.8}
-		showsHorizontalScrollIndicator={false}
+			className="flex flex-row overflow-visible"
+			horizontal={true}
+			decelerationRate={0.8}
+			showsHorizontalScrollIndicator={false}
 		>
-			{categories.map((category) => {
-				const Icon = iconMapping[category.category_name] || null;
-				return (
-					<TouchableOpacity
-						key={category.category_id}
-						onPress={() => {
-						setSelectedCategory(category.category_name);
-						onCategorySelect(category.category_name); // Lift the state up to Marketplace
-						}}
-					>
-						<View className='flex flex-col gap-2 items-center'>
-							<View className={`flex items-center justify-center h-14 w-14 rounded-full ${selectedCategory === category.category_name ? 'bg-primary-400' : 'bg-neutral-200'}`}>
-								{Icon && <Icon size={24} strokeWidth={1.5} className={selectedCategory === category.category_name ? 'text-neutral-100' : 'text-neutral-500'} />}
-							</View>
-						
-							<Text className={`font-PoppinsRegular text-xs ${selectedCategory === category.category_name ? 'text-primary-400' : 'text-neutral-500'}`}>{category.category_name}</Text>
-						</View>
-					</TouchableOpacity>
-				);
-			})}
+			<View className="flex flex-row gap-1 justify-between">
+				{categories.map((category) => {
+					const Icon = iconMapping[category.category_name] || null;
+					return (
+							<TouchableOpacity
+								key={category.category_id}
+								className='flex flex-col items-center justify-center'
+								onPress={() => {
+								setSelectedCategory(category.category_name);
+								onCategorySelect(category.category_name); // Lift the state up to Marketplace
+								}}
+							>
+									<View className='flex items-center justify-center h-10 w-20'>
+										{Icon && <Icon size={24} strokeWidth={1.5} className={selectedCategory === category.category_name ? 'text-primary-500' : 'text-neutral-400'} />}
+									</View>
+								
+									<Text className={`font-PoppinsMedium text-sm ${selectedCategory === category.category_name ? 'text-primary-500' : 'text-neutral-400'}`}>{category.category_name}</Text>
+							</TouchableOpacity>
+					);
+				})}
+			</View>
 		</ScrollView>
 	);
 }

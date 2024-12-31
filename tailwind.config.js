@@ -23,15 +23,15 @@ module.exports = {
       },
       colors: {
         primary: {
-          100: "#F5F8FF",
-          200: "#FF8F7C", // Light shade for hover effects
-          300: "#FF6C51", // Medium-light shade for secondary buttons
-          400: "#FF5438", // Original color for primary buttons and calls to action
-          500: "#C83F2E", // Darker shade for active states or outlines
-          600: "#A03225", // Dark shade for headings or stronger accents
-          700: "#7B2520", // Even darker shade for contrast
-          800: "#5D1C1B", // Deep shade for shadows or overlays
-          900: "#3F1415", // Very dark shade for text or very deep accents
+          100: "#EDE7FF", // Very light shade, for backgrounds or highlights
+          200: "#C8BFFF", // Light shade, for hover effects
+          300: "#A493FF", // Medium-light shade, for secondary buttons
+          400: "#6200EE", // Original color, for primary buttons and calls to action
+          500: "#4F00BB", // Slightly darker shade, for active states or outlines
+          600: "#3E0093", // Dark shade, for headings or stronger accents
+          700: "#2E006C", // Even darker shade, for contrast
+          800: "#220052", // Deep shade, for shadows or overlays
+          900: "#160039", // Very dark shade, for text or deep accents
         },
         secondary: {
           100: "#F8F8F8",

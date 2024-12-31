@@ -48,7 +48,7 @@ const CustomButton = ({
       {...props}
     >
       {IconLeft && <IconLeft />}
-      <Text className={`text-md font-PoppinsSemiBold ${getTextVariantStyle(textVariant)}`}>
+      <Text className={`text-md font-PoppinsMedium ${getTextVariantStyle(textVariant)}`}>
         {title}
       </Text>
       {IconRight && <IconRight />}
