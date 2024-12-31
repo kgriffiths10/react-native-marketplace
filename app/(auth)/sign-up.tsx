@@ -93,10 +93,10 @@ const SignUp = () => {
                     {/* Form */}
                 
                     <View className='px-4 flex mb-4'>
-                        <InputField label='' placeholder='First Name' value={form.firstName} onChangeText={(value) => setForm( {...form, firstName: value})}/>
-                        <InputField label='' placeholder='Last Name' value={form.lastName} onChangeText={(value) => setForm( {...form, lastName: value})}/>
-                        <InputField label='' placeholder='Email' value={form.email} onChangeText={(value) => setForm( {...form, email: value})}/>
-                        <InputField label='' placeholder='Password' value={form.password} onChangeText={(value) => setForm( {...form, password: value})} secureTextEntry={true}/>
+                        <InputField label='First Name' placeholder='John' required={true} value={form.firstName} onChangeText={(value) => setForm( {...form, firstName: value})}/>
+                        <InputField label='Last Name' placeholder='Doe' required={true} value={form.lastName} onChangeText={(value) => setForm( {...form, lastName: value})}/>
+                        <InputField label='Email' placeholder='example@email.com' required={true} value={form.email} onChangeText={(value) => setForm( {...form, email: value})}/>
+                        <InputField label='Password' placeholder='Create a strong password' required={true} value={form.password} onChangeText={(value) => setForm( {...form, password: value})} secureTextEntry={true}/>
 
                         <CustomButton title='Sign Up' onPress={onSignUpPress} className='mt-4 w-full' />
                         

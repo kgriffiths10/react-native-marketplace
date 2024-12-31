@@ -51,8 +51,8 @@ const SignIn = () => {
                     {/* Form */}
                 
                     <View className='px-4 flex mb-4'>
-                        <InputField label='' placeholder='Email' value={form.email} onChangeText={(value) => setForm( {...form, email: value})}/>
-                        <InputField label='' placeholder='Password' value={form.password} onChangeText={(value) => setForm( {...form, password: value})} secureTextEntry={true}/>
+                        <InputField label='Email' placeholder='example@email.com' required={true} value={form.email} onChangeText={(value) => setForm( {...form, email: value})}/>
+                        <InputField label='Password' placeholder='Enter your password' required={true} value={form.password} onChangeText={(value) => setForm( {...form, password: value})} secureTextEntry={true}/>
 
                         <CustomButton title='Log In' onPress={onSignInPress} className='mt-4 w-full' /> 
                         

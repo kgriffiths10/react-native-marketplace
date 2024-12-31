@@ -2,6 +2,10 @@
 
 This is a comprehensive React Native marketplace application built with [Expo](https://expo.dev). The app is designed to facilitate buying and selling items, managing listings, and interacting with other users. It leverages modern technologies and libraries to provide a seamless and efficient development experience.
 
+<div align="center">
+  <img src="assets/screenshots/mockup_3-screens.png" alt="marketplace-main" width="400"/>
+</div>
+
 ## Features
 
 - **User Authentication**: Secure user authentication using Clerk.
@@ -12,12 +16,7 @@ This is a comprehensive React Native marketplace application built with [Expo](h
 - **File-Based Routing**: Simplified navigation with Expo Router.
 - **Icon Integration**: Rich iconography with Lucide icons.
 
-## Screenshots
-<div style="display: flex; justify-content: space-around;">
-   <img src="assets/screenshots/marketplace-main.png" alt="marketplace-main" width="200"/>
-   <img src="assets/screenshots/marketplace-categories.png" alt="marketplace-categories" width="200"/>
-   <img src="assets/screenshots/marketplace-search.png" alt="marketplace-search" width="200"/>
-</div>
+
 
 ## Get started
 

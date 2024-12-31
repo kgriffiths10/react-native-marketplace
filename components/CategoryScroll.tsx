@@ -59,7 +59,7 @@ const CategoryScroll: React.FC<CategoryScrollProps> = ({ onCategorySelect, class
 			decelerationRate={0.8}
 			showsHorizontalScrollIndicator={false}
 		>
-			<View className="flex flex-row gap-1 justify-between">
+			<View className="flex flex-row gap-2 justify-between">
 				{categories.map((category) => {
 					const Icon = iconMapping[category.category_name] || null;
 					return (

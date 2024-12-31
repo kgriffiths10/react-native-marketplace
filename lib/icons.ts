@@ -29,6 +29,7 @@ import {
   ListPlus,
   MessageCircleMore,
   Settings,
+  Store
  } from 'lucide-react-native';
 import { cssInterop } from 'nativewind';
 
@@ -74,6 +75,7 @@ interopIcon(Heart);
 interopIcon(ListPlus);
 interopIcon(MessageCircleMore);
 interopIcon(Settings);
+interopIcon(Store);
 
 
 export { 
@@ -106,4 +108,5 @@ export {
   ListPlus,
   MessageCircleMore,
   Settings,
+  Store
 };

@@ -120,8 +120,8 @@ const UserListings = () => {
 
 
     return (
-        <View className='flex flex-1'>
-            <SafeAreaView className="flex-1 bg-white p-4">
+        <View className='flex-1 bg-white'>
+            <SafeAreaView className=" p-4">
                 <Text className="heading-1">
                     Your Listings
                 </Text>
@@ -139,8 +139,8 @@ const UserListings = () => {
                                 className="w-full mb-4"
                                 onPress={() => handlePresentEditListingBottomSheet(listing)}
                             >
-                                <View className="rounded-2xl bg-neutral-100 p-4 flex flex-row">
-                                    <View className="mr-4 w-28 rounded-lg bg-white"></View>
+                                <View className="rounded-2xl border border-neutral-200 p-4 flex flex-row">
+                                    <View className="mr-4 w-28 rounded-lg bg-neutral-200"></View>
                                     <View className='flex-1'>
                                         <Text className="heading-2" numberOfLines={1} ellipsizeMode="tail">{listing.title}</Text>
                                         <Text className="text-base-light mb-1">${listing.price}</Text>
@@ -155,7 +155,6 @@ const UserListings = () => {
                             </TouchableOpacity>
                         ))}
                     </View>
-                    <View className='h-32'></View>
                 </ScrollView>
             </SafeAreaView>
             
@@ -260,8 +259,6 @@ export default UserListings;
 /*
 TODO:
     // MAke categories and status' dynamic in main page, and all bottom sheets (filters, add listing)
-    // Add listing bottom sheet
-    // When a user clicks on a list item, create a new bottom sheet modal that shows the full listing details with a new api route that fetches the full listing details for that listing_id.
 
 */
 

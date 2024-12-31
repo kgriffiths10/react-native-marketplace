@@ -26,8 +26,10 @@ const DetailedListing = forwardRef<BottomSheetModal, BottomSheetModalComponentPr
     
     return (
         <BottomSheetModalComponent
-            ref={ref}
-            snapPoints={['95%']} 
+            ref  ={ref}
+            snapPoints = {['95%']}
+            header = "Listing Details" 
+
             content = {
                 <View>
                     <View className='w-full bg-neutral-200 rounded-3xl mb-4' style={{ height: screenWidth - 72 }}></View>

@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { onboarding } from '@/constants';
 import CustomButton from '@/components/CustomButton';
 import React from 'react';
+import { Store } from 'lib/icons';
 
 const Welcome = () => {
     const swiperRef = useRef<Swiper>(null);
@@ -14,35 +15,31 @@ const Welcome = () => {
     const isLastSlide = activeIndex === onboarding.length - 1;
     
     return (
-        <SafeAreaView className='flex h-full items-center justify-between'>
-            {/* Skip Button */}
-            <TouchableOpacity onPress={() => { router.replace('/(auth)/sign-up'); }} className='w-full flex justify-end items-end p-8'>
-                <Text className='text-gray-900 text-md font-PoppinsSemiBold'>Skip</Text>
-            </TouchableOpacity>
-            {/* Swiper */}
-            <Swiper 
-                ref={swiperRef} 
-                loop={false} 
-                dot={<View className='w-[32px] h-[4px] mx-1 bg-gray-300 rounded-full'/>}
-                activeDot={<View className='w-[32px] h-[4px] mx-1 bg-primary-400 rounded-full'/>}
-                onIndexChanged={(index) => setActiveIndex(index)}
-            >
-                {onboarding.map((item) => (
-                    <View key={item.id} className='flex items-center justify-center p-5 mt-48'>
-                        {/* Add image */}
-                        <View className='flex items-center justify-center'>
-                            <Text className='text-neutral-800 text-3xl font-PoppinsMedium text-center mx-2'>{item.title}</Text>
-                            <Text className='text-md font-PoppinsRegular text-center mt-4 mx-4 text-neutral-400'>{item.description}</Text>
-                        </View>
+        <SafeAreaView className='flex h-full items-center justify-between p-8'>
+
+                <View className='flex items-center justify-center p-5 mt-48'>
+                    <Store size={72} strokeWidth={1.25} className='text-primary-400 mb-8'/>
+                    <View className='flex items-center justify-center'>
+                        <Text className='text-neutral-800 text-3xl font-PoppinsMedium text-center mb-2'>Welcome to Your Marketplace</Text>
+                        <Text className='text-md font-PoppinsRegular text-center text-neutral-400'>Connect with students and find amazing deals on textbooks, electronics, and more!</Text>
                     </View>
-                ))}
-        
-            </Swiper>
-            <CustomButton 
-                title={isLastSlide ? "Get Started" : "Continue"} 
-                onPress={() => isLastSlide ? router.replace('/(auth)/sign-up') : swiperRef.current?.scrollBy(1) }
-                className="w-11/12 mt-10 mb-5"
-            />
+                </View>
+ 
+            <View className='flex flex-row gap-4'>
+                <CustomButton 
+                    title='Log In'
+                    onPress={() => router.replace('/(auth)/sign-in')}
+                    className='flex-1 bg-primary-400'
+                />
+                <CustomButton 
+                    title='Sign Up'
+                    onPress={() => router.replace('/(auth)/sign-up')}
+                    className='flex-1'
+                />
+            
+            </View>
+            
+            
         </SafeAreaView>
     );
 }

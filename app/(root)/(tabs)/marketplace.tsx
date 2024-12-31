@@ -6,7 +6,7 @@ import { SignedIn, useUser } from "@clerk/clerk-expo";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { MapPinned, Search, Settings2 } from "lib/icons";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { FlatList, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from "react-native";
+import { FlatList, Text, TextInput, TouchableOpacity, View, ActivityIndicator, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Marketplace = () => {
@@ -60,7 +60,7 @@ const Marketplace = () => {
 
 
 	return (
-		<View className="bg-white flex-1 px-4 pt-4 pb-16">
+		<View className="bg-white flex-1 px-4 pt-4">
 				
 			<SafeAreaView>
 				<SignedIn>
@@ -115,7 +115,12 @@ const Marketplace = () => {
 							onPress={() => presentDetailedListing(item)}
 						>
 							<View className="mb-4">
-								<View className="h-72 bg-neutral-200 rounded-xl"></View>
+								<View className="h-72 bg-neutral-200 rounded-xl">
+										<Image
+											source={require('assets/images/connor-home-djJoOgDRvzU-unsplash.jpg')}
+											style={{ width: '100%', height: '100%', borderRadius: 10 }}
+										/>
+								</View>
 								<View className="flex flex-row justify-between mt-2">
 									<Text className="text-base font-PoppinsMedium text-neutral-800 flex-1" numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
 									<Text className="text-base font-PoppinsMedium text-neutral-800">${item.price}</Text>
@@ -138,6 +143,7 @@ const Marketplace = () => {
 							{filters.category} ({listings?.length || 0} results)
 						</Text>
 					}
+					className="flex-1"
 				/>
 			)}
 			<MarketplaceFilter ref={filterBottomSheetRef} />

@@ -23,18 +23,34 @@ const FavListings = () => {
 
 	const address = `${location.city}, ${location.region}, ${location.country}`;
 
+	const capitalizeFirstLetter = (string: string) => {
+		return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+	};
+
 	const handleLocationSearch = async (address: string) => {
-		const results = await Location.geocodeAsync(address);
-		if (results.length > 0) {
-			const { latitude, longitude } = results[0];
-			console.log(`Geocoded Location: Latitude: ${latitude}, Longitude: ${longitude}`);
-			setLocation((prev) => ({
-				...prev,
-				latitude: latitude.toString(),
-				longitude: longitude.toString(),
-			}));
-		} else {
-			console.log('No results found, verify address');
+		if (!location.city || !location.region || !location.country) {
+			alert('Please enter a valid city, region, and country');
+			return;
+		}
+	
+		const formattedAddress = `${capitalizeFirstLetter(location.city)}, ${capitalizeFirstLetter(location.region)}, ${capitalizeFirstLetter(location.country)}`;
+
+		try {
+			const results = await Location.geocodeAsync(formattedAddress);
+			if (results.length > 0) {
+				const { latitude, longitude } = results[0];
+				console.log(`Geocoded Location: Latitude: ${latitude}, Longitude: ${longitude}`);
+				setLocation((prev) => ({
+					...prev,
+					latitude: latitude.toString(),
+					longitude: longitude.toString(),
+				}));
+			} else {
+				console.log('No results found, verify address');
+			}
+		} catch (error) {
+			console.error('Error fetching location data:', error);
+			console.log('Failed to fetch location data. Please try again.');
 		}
 	}
 	
@@ -49,7 +65,7 @@ const FavListings = () => {
 		
 			/>
 			<InputField
-				label="Region"
+				label="Province/State"
 				className="mb-4"
 				value={location.region}
 				onChangeText={(text) => setLocation((prev) => ({ ...prev, region: text }))}
