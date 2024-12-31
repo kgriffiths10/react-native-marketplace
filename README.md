@@ -3,7 +3,7 @@
 This is a comprehensive React Native marketplace application built with [Expo](https://expo.dev). The app is designed to facilitate buying and selling items, managing listings, and interacting with other users. It leverages modern technologies and libraries to provide a seamless and efficient development experience.
 
 <div align="center">
-  <img src="assets/screenshots/mockup_3-screens.png" alt="marketplace-main" width="400"/>
+  <img src="assets/screenshots/mockup_3-screens.png" alt="marketplace-main" width="100%"/>
 </div>
 
 ## Features
