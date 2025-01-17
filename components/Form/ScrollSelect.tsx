@@ -53,11 +53,11 @@ export const ScrollSelect = ({
 
   return (
     <>
-      <Text className='heading-3 mb-2'>
+      <Text className='label'>
         {label} {required && <Text className="text-red-500">*</Text>}
       </Text>
       
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 overflow-visible'>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-8 overflow-visible'>
         <View className='flex flex-row gap-2'>
           {options.map((option) => (
             <TouchableOpacity

@@ -87,6 +87,23 @@ module.exports = {
           700: "#EBEBEB",
           800: "#ADADAD",
         },
+        // Listing Status Colors
+        active: {
+          100: "#CBEE56",
+          200: "#6C890B",
+        },
+        inactive: {
+          100: "#EECB56",
+          200: "#A58315",
+        },
+        draft: {
+          100: "#C9C9C9",
+          200: "#6D6D6D",
+        },
+        sold: {
+          100: "#6DB2F2",
+          200: "#1D64A7",
+        },
       },
     },
   },

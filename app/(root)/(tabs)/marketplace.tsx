@@ -4,10 +4,13 @@ import CategoryScroll from "@/components/CategoryScroll";
 import { useFetch } from "@/lib/fetch";
 import { SignedIn, useUser } from "@clerk/clerk-expo";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { MapPinned, Search, Settings2 } from "lib/icons";
+import { MapPin, MapPinned, Search, Settings2 } from "lib/icons";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { FlatList, Text, TextInput, TouchableOpacity, View, ActivityIndicator, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { BlurView } from 'expo-blur';
+import InputField from "@/components/Form/InputField";
+
 
 const Marketplace = () => {
 	const { user } = useUser();
@@ -52,6 +55,8 @@ const Marketplace = () => {
 	// DetailedListing Bottom Sheet
 	const detailedListingBottomSheetRef = useRef<BottomSheetModal>(null);
 	const [selectedListing, setSelectedListing] = useState<any>(null);
+	
+	
 	const presentDetailedListing = useCallback((listing: any) => {
 		setSelectedListing(listing);
 		detailedListingBottomSheetRef.current?.present();
@@ -73,7 +78,7 @@ const Marketplace = () => {
 						<Search className='text-neutral-800 w-12 h-12 mr-4' />
 						<TextInput 
 							placeholder='Search Listings' 
-							className='text-neutral-800 w-full'
+							className='text-neutral-800 flex-1'
 							returnKeyType="search"
 							// value={searchQuery}
 							// onChangeText={setSearchQuery}
@@ -99,6 +104,7 @@ const Marketplace = () => {
 					<Text className="text-neutral-800 text-sm font-PoppinsLight">Banner Ad</Text>
 				</View>
 
+
 				<CategoryScroll onCategorySelect={handleCategorySelect} />
 			</SafeAreaView>
 			{loading ? (
@@ -112,30 +118,42 @@ const Marketplace = () => {
 						<TouchableOpacity
 							key={item.listing_id}
 							className="w-full mb-4"
-							onPress={() => presentDetailedListing(item)}
+							onPress={() => presentDetailedListing(item)} // 
+							activeOpacity={1}
 						>
 							<View className="mb-4">
-								<View className="h-72 bg-neutral-200 rounded-xl">
-										<Image
-											source={require('assets/images/connor-home-djJoOgDRvzU-unsplash.jpg')}
-											style={{ width: '100%', height: '100%', borderRadius: 10 }}
-										/>
+								<View className="h-80 bg-neutral-200 rounded-xl">
+									<Image
+										source={require('assets/images/connor-home-djJoOgDRvzU-unsplash.jpg')}
+										className="w-full h-full rounded-xl"
+									/>
+									{item.is_featured && ( 
+										<BlurView intensity={100} tint="regular" className="absolute top-0 left-0 py-1 px-3 m-4 overflow-hidden rounded-full self-start">
+											<Text className="text-sm font-PoppinsLight text-neutral-200">Featured</Text>
+										</BlurView>
+									)}
+									<BlurView intensity={100} tint="regular" className=" absolute bottom-0 left-0 right-0 p-4 m-4 overflow-hidden rounded-lg">
+										<View className="flex flex-row justify-between">
+											<Text className="text-lg font-PoppinsMedium text-neutral-100 flex-1 mr-2" numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
+											<Text className="text-lg font-PoppinsMedium text-neutral-100">${item.price}</Text>
+										</View>
+										<View className="flex flex-row items-center gap-1">
+											<MapPin size={16} strokeWidth={1.25} className="text-neutral-200"/>
+											<Text className="text-sm font-PoppinsLight text-neutral-200">{item.location}</Text>
+										</View>
+										{/* <Text className="text-sm font-PoppinsRegular text-neutral-300">
+											Sold by {item.first_name} {item.last_name}
+										</Text> */}
+									</BlurView>	
 								</View>
-								<View className="flex flex-row justify-between mt-2">
-									<Text className="text-base font-PoppinsMedium text-neutral-800 flex-1" numberOfLines={1} ellipsizeMode="tail">{item.title}</Text>
-									<Text className="text-base font-PoppinsMedium text-neutral-800">${item.price}</Text>
-								</View>
-								<Text className="text-sm font-PoppinsRegular text-neutral-500">{item.location}</Text>
-								<Text className="text-sm font-PoppinsRegular text-neutral-500">
-									Sold by {item.first_name} {item.last_name}
-								</Text>
+								
+								
 							</View>	
 						</TouchableOpacity>
 						
 					)}
 					keyExtractor={(item) => item.listing_id}
 					showsVerticalScrollIndicator={false}
-					ListFooterComponent={<View className="h-32"></View>}
 					refreshing={loading}
 					onRefresh={refetch}
 					ListHeaderComponent={

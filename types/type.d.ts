@@ -11,7 +11,7 @@ declare interface ButtonProps extends TouchableOpacityProps {
 }
 
 declare interface InputFieldProps extends TextInputProps {
-  label: string;
+  label?: string;
   icon?: React.ElementType; // Change to React.ElementType to accept any component
   secureTextEntry?: boolean;
   labelStyle?: string;
@@ -20,6 +20,7 @@ declare interface InputFieldProps extends TextInputProps {
   iconStyle?: string;
   className?: string;
   required?: boolean;
+
 }
 declare interface ScrollSelectProps extends TextInputProps {
   label: string;
@@ -28,6 +29,7 @@ declare interface ScrollSelectProps extends TextInputProps {
   onChange: (value: string | string[]) => void;
   multiple?: boolean;
   required?: boolean;
+  layout?: "scroll" | "wrap";
 }
 
 declare interface PriceFieldProps extends InputFieldProps {

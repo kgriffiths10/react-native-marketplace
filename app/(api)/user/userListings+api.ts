@@ -30,6 +30,7 @@ export async function GET(request: Request) {
                 listings.title, 
                 listings.price, 
                 listings.status, 
+                listings.is_featured,
                 categories.category_name
             FROM 
                 listings

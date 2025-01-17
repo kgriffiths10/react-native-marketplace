@@ -23,16 +23,19 @@ const MarketplaceFilter = forwardRef<BottomSheetModal, BottomSheetModalComponent
             snapPoints={['85%']} 
             content = {
                 <View>
-                    <Text className='text-lg font-PoppinsSemiBold text-neutral-800 mb-4 text-center'>
+                    <Text className='heading-2 text-center'>
                             Filters
                     </Text>
+
+                    <Text className="label">Sort by</Text>
+                
                     <Text>Set Location</Text>
 
 
                     <Text>Sort By</Text>
                     <Text>Location</Text>
                     <Text>Condition</Text>
-                    <Text>Price Min</Text>
+                    <Text>Price Min</Text>'heading-3 mb-2'
                     <Text>Price Max</Text>
 
 

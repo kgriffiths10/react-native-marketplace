@@ -1,21 +1,18 @@
 import { ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from "react-native";
 import InputField from "../Form/InputField";
-import { Info, Minus, Plus, } from "@/lib/icons";
+import { ArrowBigUpDash, CircleX, Info, Minus, Plus, SquarePen, } from "@/lib/icons";
 import ScrollSelect from "../Form/ScrollSelect";
 import CustomButton from "../CustomButton";
 import { forwardRef, useCallback, useRef, useState, useEffect } from "react";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import BottomSheetModalComponent from "./BottomSheetModal";
+import BottomSheetModalComponent, { BottomSheetModalComponentProps } from "./BottomSheetModal";
 import PriceField from "../Form/PriceField";
 import { useUser } from "@clerk/clerk-expo";
 import { fetchAPI, useFetch } from "@/lib/fetch";
-
-type BottomSheetModalComponentProps = {
-  content?: React.ReactNode;
-};
+import SelectField from "../Form/SelectField";
 
 const AddListing = forwardRef<BottomSheetModal, BottomSheetModalComponentProps>(
-  ({ content }, ref) => {
+  ({ content, header, footer, snapPoints }, ref) => {
     const { user } = useUser();
     const clerkID = user?.id;
 
@@ -230,153 +227,160 @@ const AddListing = forwardRef<BottomSheetModal, BottomSheetModalComponentProps>(
         <BottomSheetModalComponent
             ref={ref}
             snapPoints={['85%']} 
+            header="Add Listing"
+            footer= {
+                <View className="bg-neutral-100 shadow-lg rounded-t-2xl px-8 pt-8 pb-8">
+                    {/* Buttons */}
+                    <View className='flex flex-col gap-4'>
+                        <View className="flex flex-row align-center items-center gap-4">
+                            <SquarePen className='text-neutral-400' size={32} strokeWidth={1.5} onPress={onPressDraft}/>
+                            <CustomButton 
+                                title='Create' 
+                                onPress={onPressPost}
+                                className="flex-1"
+                            />  
+                            <CircleX className='text-neutral-400' size={32} strokeWidth={1.5} onPress={onPressCancel} />    
+                        </View>
+                        
+                        {/* <View className='flex flex-row gap-4'>
+                            <CustomButton 
+                                title='Save as Draft' 
+                                bgVariant='outline' 
+                                textVariant='secondary' 
+                                onPress={onPressDraft} 
+                                className='flex-1'
+                            />
+                            <CustomButton 
+                                title='Cancel' 
+                                bgVariant='danger' 
+                                textVariant='danger' 
+                                onPress={onPressCancel} 
+                                className='flex-1'
+                            />
+                        </View> */}
+                    </View>
+                </View>
+            }
             content = {
                 <View>
-                    <Text className='text-lg font-PoppinsSemiBold text-neutral-800 mb-4 text-center'>
-                            Add a Listing
-                    </Text>
-                    <View className="flex-1">
-
-                        {/* Title */}
+                    {/* Category */}
+                    <View>
+                        <SelectField
+                            label="Select a Category"
+                            options={categories}
+                            selectedValues={[form.category]}
+                            onChange={(selected) => setForm({ ...form, category: selected[0] })}
+                            required={true}
+                            multiple={false}
+                            wrap={true}
+                        />
+                    </View>
+                    {/* Title */}
+                    <View>
                         <InputField 
-                            label='Title' 
-                            placeholder='A descriptive listing title' 
-                            maxLength={50} 
-                            required={true} 
-                            defaultValue={form.title} 
-                            onChangeText={(value) => setForm((prev) => ({ ...prev, title: value }))}
+                            label="Title"
+                            required={true}
+                            placeholder="2020 Gen 3 Headphones"
+                            defaultValue={form.title}
+                            onChangeText={(value) => setForm({ ...form, title: value })}
                         />
-                        {/* Cateogry */}
-                        <ScrollSelect
-                            label="Category"
-                            options={categories.map(category => category.name)}
-                            selectedValues={categories.find(category => category.id === form.category)?.name || ''}
-                            onChange={(value) => {
-                                const selectedCategory = categories.find(category => category.name === value);
-                                setForm({ ...form, category: selectedCategory ? selectedCategory.id : '' });
-                            }}
-                            required={true} // Will default to first option and prevent deselection
-                        />
-                        {/* Description */}
-                        <InputField 
-                            label='Description'     
-                            placeholder='Detailed listing description' 
-                            maxLength={500} 
-                            multiline={true} 
-                            className='h-24' 
-                            required={true} 
-                            defaultValue={form.description} 
-                            onChangeText={(value) => setForm( {...form, description: value})}
-                        />
-                        {/* Price */}
+                    </View>
+                    {/* Price */}
+                    <View>
                         <PriceField 
-                            label='Price' 
-                            defaultValue={form.price} 
-                            currency='USD' 
-                            required={true} 
-                            onChangeText={(value) => setForm( {...form, price: value})}
+                            label="Price"
+                            required={true}
+                            placeholder="00.00" 
+                            currency="USD"
+                            defaultValue={form.price}
+                            onChangeText={(value) => setForm({ ...form, price: value })}
                         />
-                        {/* Images */}
-                        <Text className='heading-3 mb-2'>Images</Text>
+                    </View>
+                    {/* Description */}
+                    <View>
+                        <InputField 
+                            label="Description"
+                            required={true}
+                            placeholder="2020 Gen 3 Headphones"
+                            defaultValue={form.description}
+                            onChangeText={(value) => setForm({ ...form, description: value })}
+                        />
+                    </View>
+                    {/* Condition */}
+                    <SelectField
+                        label="Condition"
+                        options={[
+                            { id: 'new', name: 'New' },
+                            { id: 'used', name: 'Used' },
+                            { id: 'refurbished', name: 'Refurbished' }
+                        ]}
+                        selectedValues={[form.condition]}
+                        onChange={(selected) => setForm({ ...form, condition: selected[0] })}
+                        multiple={false}
+                        wrap={true}
+                    />
+                    {/* Location */}
+                    <View>
+                        <InputField 
+                            label="Location"
+                            required={true}
+                            placeholder="Search listing city"
+                            defaultValue={form.location}
+                            onChangeText={(value) => setForm({ ...form, location: value })}
+                        />
+                    </View>
+                    {/* Images */}
+                    <View className="mb-8">
+                        <Text className="label">Images</Text>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='flex flex-row mb-4 gap-4 overflow-visible'>
-                            <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 items-center justify-center">
+                            <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-200 items-center justify-center">
                                 <Plus className='text-neutral-800' size={32} />
                             </View>
-                            <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
-                            <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
-                            <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-100 "></View>
-                            <View className="w-28 h-24 rounded-lg bg-neutral-100 "></View>
+                            <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-200 "></View>
+                            <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-200 "></View>
+                            <View className="w-28 h-24 mr-4 rounded-lg bg-neutral-200 "></View>
+                            <View className="w-28 h-24 rounded-lg bg-neutral-200 "></View>
                         </ScrollView>
-                        {/* Condition */}
-                        <ScrollSelect
-                            label="Condition"
-                            options={['New', 'Used', 'Refurbished']}
-                            selectedValues={form.condition}
-                            required={false} // Allows no selection
-                            onChange={(value) => setForm({ ...form, condition: value as string })}
-                        />
-                        {/* Trade */}
-                        <View className='flex flex-row items-center justify-between mb-4'>
-                            <Text className='heading-3'>Open to trade?</Text>
-                            <Switch 
-                                onValueChange={toggleSwitch} 
-                                value={form.isTrade}
-                            />    
+                    </View>
+                    {/* Feature */}
+                    <View>
+                        <View className="flex flex-row items-center justify-between">
+                            <View>
+                                <Text className="label">Feature Listing</Text>
+                                <Text className="text-base-light mb-4">Get more views and sell faster!</Text>    
+                            </View>
+                            <TouchableOpacity>
+                                <Info className="text-neutral-300" strokeWidth={1.75} />        
+                            </TouchableOpacity>
                         </View>
-                        
-                        
-                        {/* Location */}
-                        <InputField 
-                            label='Location' 
-                            placeholder='Enter listing location' 
-                            required={true} 
-                            defaultValue={form.location}
-                             onChangeText={(value) => setForm( {...form, location: value})}
-                        />
-                        <InputField 
-                            label='Long' 
-                            placeholder='Enter listing long' 
-                            required={true} 
-                            defaultValue={form.longitude} 
-                            onChangeText={(value) => setForm( {...form, longitude: value})}
-                        />
-                        <InputField 
-                            label='Lat' 
-                            placeholder='Enter listing lat' 
-                            required={true} 
-                            defaultValue={form.latitude} 
-                            onChangeText={(value) => setForm( {...form, latitude: value})}
-                        />
-
-                        {/* Boost Listing */}
-                        <View className='my-4'>
-                            <View className='flex flex-row gap-4 items-center'>
-                                <TouchableOpacity className='bg-neutral-800 w-12 h-12 rounded-full items-center justify-center' onPress={coinDecrement}>
-                                    <Minus className='stroke-neutral-100'/>
-                                </TouchableOpacity>
-                                <View className='bg-neutral-200 rounded-2xl p-4 items-center flex-1'>
-                                    <Text className='heading-2 text-center'>Boost Your Listing</Text>
-                                    <Text className='text-base-light text-center'>Get more views and sell faster!</Text>
-                                    <Text className='text-2xl font-PoppinsMedium mt-2 mb-2'>{timeInDays} days</Text>
-                                    <Text className='text-base-light'>Available Coins: {coinsRemaining}</Text>
+                        <View className="flex gap-4 mb-8">
+                            <TouchableOpacity className="flex flex-row items-center justify-between border border-neutral-300 rounded-2xl p-4">
+                                <View className="flex flex-row items-center gap-4">
+                                    <View className="h-6 w-6 border border-neutral-300 rounded-full"></View>
+                                    <Text className="text-lg font-PoppinsMedium">24 hrs</Text>
                                 </View>
-                                <TouchableOpacity className='bg-neutral-800 w-12 h-12 rounded-full items-center justify-center' onPress={coinIcrement}>
-                                    <Plus className='stroke-neutral-100'/>
-                                </TouchableOpacity>
-                            </View>
-                            <View className='flex flex-row gap-2 items-center justify-center mt-1'>
-                                    <Info className='stroke-neutral-500' size={16} />
-                                    <Text className='text-sm-light'>Learn More & Add Coins</Text>
-                            </View>
+                                <Text className="text-lg font-PoppinsRegular text-neutral-400">$1.99 USD</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity className="flex flex-row items-center justify-between border border-neutral-300 rounded-2xl p-4">
+                                <View className="flex flex-row items-center gap-4">
+                                    <View className="h-6 w-6 border border-neutral-300 rounded-full"></View>
+                                    <Text className="text-lg font-PoppinsMedium">7 days</Text>
+                                    <View className="bg-neutral-800 self-start py-1 px-3 rounded-full">
+                                        <Text className="text-neutral-100 text-sm font-PoppinsRegular">BEST VALUE</Text>
+                                    </View>
+                                </View>
+                                <Text className="text-lg font-PoppinsRegular text-neutral-400">$4.99 USD</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity className="flex flex-row items-center justify-between border border-neutral-300 rounded-2xl p-4">
+                                <View className="flex flex-row items-center gap-4">
+                                    <View className="h-6 w-6 border border-neutral-300 rounded-full"></View>
+                                    <Text className="text-lg font-PoppinsMedium">14 days</Text>
+                                </View>
+                                <Text className="text-lg font-PoppinsRegular text-neutral-400">$8.99 USD</Text>
+                            </TouchableOpacity>
                         </View>
-
-                    
-                        {/* Buttons */}
-                        <View className='flex flex-col gap-4 mt-6'>
-                            <CustomButton 
-                                title='Post Listing' 
-                                onPress={onPressPost}
-                            >       
-                            </CustomButton> 
-                            <View className='flex flex-row gap-4'>
-                                <CustomButton 
-                                    title='Save as Draft' 
-                                    bgVariant='outline' 
-                                    textVariant='secondary' 
-                                    onPress={onPressDraft} 
-                                    className='flex-1'
-                                />
-                                <CustomButton 
-                                    title='Cancel' 
-                                    bgVariant='danger' 
-                                    textVariant='danger' 
-                                    onPress={onPressCancel} 
-                                    className='flex-1'
-                                />
-                            </View>
-                        </View>
-
-                    </View> 
+                    </View>
+                    <View className="h-32"></View>
                 </View>
             }
         />

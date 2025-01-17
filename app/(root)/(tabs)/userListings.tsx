@@ -2,7 +2,7 @@ import BottomSheetModalComponent from '@/components/BottomSheets/BottomSheetModa
 import { useFetch } from '@/lib/fetch';
 import { useUser } from '@clerk/clerk-expo';
 import BottomSheet, { BottomSheetModal, BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { Plus, Search, Settings2 } from '@/lib/icons';
+import { CircleEllipsis, Dot, EllipsisVertical, Plus, Search, Settings2, Store } from '@/lib/icons';
 import { useCallback, useRef, useState } from 'react';
 import { ScrollView, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +10,16 @@ import Slider from '@react-native-community/slider';
 
 import AddListing from '@/components/BottomSheets/AddListing';
 import EditListing from '@/components/BottomSheets/EditListing';
+import CustomButton from '@/components/CustomButton';
+import { LinearGradient } from 'expo-linear-gradient';
+import { cssInterop } from 'nativewind';
+
+const InteropLinearGradient = cssInterop(LinearGradient, {
+  className: {
+    target: "style",
+    nativeStyleToProp: {},
+  },
+});
 
 const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handlePresentAddBottomSheet }: { searchQuery: string, setSearchQuery: (query: string) => void, handlePresentModalPress: () => void, handlePresentAddBottomSheet: ()=>void }) => {
     return (
@@ -27,9 +37,9 @@ const SearchBar = ({ searchQuery, setSearchQuery, handlePresentModalPress, handl
             <TouchableOpacity className="border-neutral-300 border rounded-full align-center justify-center p-3" onPress={handlePresentModalPress}>
                 <Settings2 className='stroke-neutral-800' />
             </TouchableOpacity>
-            <TouchableOpacity className="bg-primary-400 rounded-full align-center justify-center p-3" onPress={handlePresentAddBottomSheet}>
+            {/* <TouchableOpacity className="bg-primary-400 rounded-full align-center justify-center p-3" onPress={handlePresentAddBottomSheet}>
                 <Plus className='stroke-neutral-100' />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     );
 };
@@ -42,28 +52,28 @@ const UserListings = () => {
         switch (status) {
             case 'Active':
                 return {
-                    view: 'border-green-600 bg-green-200',
-                    text: 'text-green-600',
+                    dot: 'bg-active-100',
+                    text: 'text-neutral-400',
                 };
             case 'Draft':
                 return {
-                    view: 'border-gray-600 bg-gray-200',
-                    text: 'text-gray-600',
+                    dot: 'bg-draft-100',
+                    text: 'text-neutral-400',
                 };
             case 'Sold':
                 return {
-                    view: 'border-blue-600 bg-blue-200',
-                    text: 'text-blue-600',
+                    dot: 'bg-sold-100',
+                    text: 'text-neutral-400',
                 };
             case 'Inactive':
                 return {
-                    view: 'border-yellow-600 bg-yellow-200',
-                    text: 'text-yellow-600',
+                    dot: 'bg-red-500',
+                    text: 'text-neutral-400',
                 };
             default:
                 return {
-                    view: 'border-gray-300 bg-gray-100',
-                    text: 'text-gray-300',
+                    dot: 'bg-neutral-300',
+                    text: 'text-neutral-400',
                 };
         }
     };
@@ -116,9 +126,6 @@ const UserListings = () => {
         console.log('handleSheetChanges', index);
     }, []);
 
-
-
-
     return (
         <View className='flex-1 bg-white'>
             <SafeAreaView className=" p-4">
@@ -131,31 +138,77 @@ const UserListings = () => {
                     handlePresentModalPress={handlePresentModalPress} 
                     handlePresentAddBottomSheet={handlePresentAddListingBottomSheet}
                 />
-                <ScrollView>
-                    <View>
-                        {filteredListings?.map((listing: any) => (
+                <InteropLinearGradient
+                    colors={['#f56565', '#ed8936']}
+                    start={[0, 0]}
+                    end={[1, 0]}
+                    className='mb-8 px-8 py-4 rounded-2xl'
+                >
+                    <Text className='text-center font-PoppinsRegular text-neutral-100 text-base mb-2'>Earnings</Text>
+                    <Text className='text-center font-PoppinsSemiBold text-neutral-50 text-4xl mb-4'>$2659.00</Text>
+                    <CustomButton 
+                        title='Add Listing' 
+                        onPress={handlePresentAddListingBottomSheet}
+                        bgVariant='secondary'
+                    />
+                    <View className='flex flex-row justify-between'>
+                        <View >
+                            <Text className='text-center font-PoppinsRegular text-neutral-100 text-sm mt-4'>Listings</Text>
+                            <Text className='text-center font-PoppinsSemiBold  text-neutral-50 text-2xl'>12</Text>
+                        </View>
+                        <View>
+                            <Text className='text-center font-PoppinsRegular text-neutral-100 text-sm mt-4'>Active</Text>
+                            <Text className='text-center font-PoppinsSemiBold text-neutral-50 text-2xl'>4</Text>
+                        </View>
+                        <View>
+                            <Text className='text-center font-PoppinsRegular text-neutral-100 text-sm mt-4'>Sold</Text>
+                            <Text className='text-center font-PoppinsSemiBold  text-neutral-50 text-2xl'>25</Text>
+                        </View>
+                        <View>
+                            <Text className='text-center font-PoppinsRegular text-neutral-100 text-sm mt-4'>Views</Text>
+                            <Text className='text-center font-PoppinsSemiBold text-neutral-50 text-2xl'>2756</Text>
+                        </View>    
+                    </View>
+                    
+                </InteropLinearGradient>    
+                
+                {filteredListings?.length ? (
+                    <ScrollView>
+                        {filteredListings.map((listing: any) => (
                             <TouchableOpacity 
                                 key={listing.listing_id} 
                                 className="w-full mb-4"
                                 onPress={() => handlePresentEditListingBottomSheet(listing)}
                             >
-                                <View className="rounded-2xl border border-neutral-200 p-4 flex flex-row">
-                                    <View className="mr-4 w-28 rounded-lg bg-neutral-200"></View>
+                                <View className="rounded-2xl border border-neutral-200 p-4 flex flex-row items-center gap-4">
+                                    <View className="w-16 h-16 rounded-full bg-neutral-200"></View>
                                     <View className='flex-1'>
-                                        <Text className="heading-2" numberOfLines={1} ellipsizeMode="tail">{listing.title}</Text>
-                                        <Text className="text-base-light mb-1">${listing.price}</Text>
-                                        {/* <Text className="text-sm font-PoppinsRegular text-neutral-400">{listing.category_name}</Text> */}
-                                        <View className={`self-start rounded-full border ${statusStyles(listing.status).view} px-3 py-1`}>
-                                            <Text className={`text-sm font-PoppinsMedium ${statusStyles(listing.status).text}`}>{listing.status}</Text>
+                                        <Text className="heading-3" numberOfLines={1} ellipsizeMode="tail">{listing.title}</Text>
+                                        <View className='flex flex-row items-center'>
+                                            <View className={`w-3 h-3 rounded-full mr-2 ${statusStyles(listing.status).dot}`}></View>
+                                            <Text className={`text-sm font-PoppinsRegular ${statusStyles(listing.status).text}`}>{listing.status}</Text>
                                         </View>
-                                          
                                     </View>
-                                    
+                                    <Text className="heading-3">${listing.price}</Text>
+                                    <View>
+                                        <EllipsisVertical className='stroke-neutral-400' />
+                                    </View>
                                 </View>
                             </TouchableOpacity>
                         ))}
+                    </ScrollView>
+                ) : (
+                    <View className='mt-32 flex flex-col items-center justify-center'>   
+                        <Store size={24} strokeWidth={1.5} className='text-neutral-400'/>
+                        <Text className="text-lg font-PoppinsRegular text-neutral-500 text-center mb-2">No listings here yet!</Text>
+                        <TouchableOpacity 
+                            className='border border-neutral-400 py-1 px-2 rounded-lg'
+                            onPress={handlePresentAddListingBottomSheet}
+                        >
+                            <Text className='text-sm-light'>Add Listing</Text>
+                        </TouchableOpacity>
                     </View>
-                </ScrollView>
+                )}
             </SafeAreaView>
             
             {/* Filter Bottom Sheet */}
@@ -164,12 +217,13 @@ const UserListings = () => {
                 content={
                     <View>
                         {/* Title */}
-                        <Text className='text-lg font-PoppinsSemiBold text-neutral-800 mb-4 text-center'>
+                        <Text className='heading-2 mb-4 text-center'>
                             Filter Listings
                         </Text>
                         
                         {/* Status Filter */}
                         <View className='mb-6'>
+
                             <Text className='mb-2 text-md font-PoppinsSemiBold text-neutral-800'>Status</Text>
                             <View className='flex flex-row gap-2'>
                                 {['Active', 'Inactive', 'Sold', 'Draft'].map((statusOption) => (

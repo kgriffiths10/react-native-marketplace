@@ -5,7 +5,6 @@ import { PriceFieldProps } from "@/types/type";
 const PriceField = ({
     label,
     labelStyle,
-    currency = "USD",
     secureTextEntry = false,
     containerStyle,
     inputStyle,
@@ -27,23 +26,29 @@ const PriceField = ({
     };
 
     const handleBlur = () => {
-        const formattedValue = formatPrice(value);
-        setValue(formattedValue); // Update the field value
-        onChangeText?.(formattedValue); // Notify parent component about the change
+        if (value === "") {
+            setValue(""); // Ensure the placeholder shows if the value is empty
+            onChangeText?.(""); // Notify parent component about the change
+        } else {
+            const formattedValue = formatPrice(value);
+            setValue(formattedValue); // Update the field value
+            onChangeText?.(formattedValue); // Notify parent component about the change
+        }
     };
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <View className="w-full mb-2">
+                <View className="w-full mb-8">
                     {/* Label */}
-                    <Text className={`heading-3 mb-2 ${labelStyle}`}>
-                        {label} ({currency}) {required && <Text className="text-red-500">* </Text>}
-                    </Text>
+                    {label && (
+                        <Text className={`label ${labelStyle}`}>
+                            {label} {required && <Text className="text-red-500">*</Text>}
+                        </Text>
+                    )}
 
                     {/* Input Container */}
-                    <View className="flex flex-row">
-                        <Text className="text-3xl font-PoppinsRegular text-neutral-800">$</Text>
+                    <View className={`flex flex-row justify-start items-center relative rounded-xl border border-gray-300 focus:border-primary-400 w-full ${containerStyle}`}>
                         <TextInput
                             value={value || ""} // Set the value of the input field
                             onChangeText={(text) => {
@@ -54,9 +59,10 @@ const PriceField = ({
                             }}
                             onBlur={handleBlur} // Format value on blur
                             placeholder="00.00"
+                            inputMode="decimal"
                             keyboardType="numeric"
                             secureTextEntry={secureTextEntry}
-                            className={`text-3xl font-PoppinsRegular text-neutral-800 ${inputStyle} text-left`}
+                            className={`rounded-full p-4 font-PoppinsRegular flex-1 ${inputStyle} text-left`}
                             {...props}
                         />
                     </View>

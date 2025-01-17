@@ -11,7 +11,7 @@
 }
 
 .heading-3 {
-  @apply text-base font-PoppinsMedium text-neutral-800;;
+  @apply text-base font-PoppinsMedium text-neutral-800;
 }
 
 .text-base-regular {
@@ -26,4 +26,8 @@
 }
 .text-sm-regular {
   @apply text-sm font-PoppinsRegular text-neutral-800;
+}
+
+.label {
+  @apply text- font-PoppinsMedium text-neutral-800;
 }
